@@ -12,7 +12,7 @@ import Store from './Pages/Store.jsx'
 import Accessories from './Pages/Accessories.jsx'
 import LeaseEmployee from './Pages/Leasing/LeaseEmployer.jsx'
 import LeaseEmployer from './Pages/Leasing/LeaseEmployer.jsx'
-import Robyn from './Pages/Products/Robyn.jsx'
+import Ace from './Pages/Products/Ace.jsx'
 import Ivy from './Pages/Products/Ivy.jsx'
 import ErrorPage from './Pages/ErrorPage.jsx'
 
@@ -75,8 +75,8 @@ const router = createBrowserRouter([
         element: <Ivy />,
       },
       {
-        path: "products/robyn-women",
-        element: <Robyn />,
+        path: "products/ace",
+        element: <Ace />,
       },
     ]
   },

@@ -1,26 +1,27 @@
 import React, { Suspense } from 'react'
 import Header from '../../Components/Header'
 
-const IntroIvy = React.lazy(() => import('../../Sections/Products/IntroIvy'));
+const IntroAce = React.lazy(() => import('../../Sections/Products/IntroAce'));
 const ElectricMainContent = React.lazy(() => import('../../Components/ElectricMainContent'));
 
 
-const Ivy = () => {
+const Ace = () => {
 
 
   return (
     <>
       <Header bg={false} />
       <Suspense fallback={<div className='text-center'>Loading...</div>}>
-        <IntroIvy scrollId={"ivy-specifications"} />
+        <IntroAce scrollId={"ace-specifications"} />
       </Suspense>
 
       {/* Content */}
       <Suspense fallback={<div className='text-center'>Loading...</div>}>
-        <ElectricMainContent productName={"Ivy_Two"} />
+        <ElectricMainContent productName={"Ace_Two"} />
       </Suspense>
+      
     </>
   )
 }
 
-export default Ivy
+export default Ace

@@ -27,7 +27,7 @@ const CityBike = () => {
           <img className="w-80 h-96 bg-[#a8abac]" src="/images/City Bike/City_collection_1_desktop.webp" alt="Logo on Product" loading="lazy" />
           <img className="mt-6 w-[670px] bg-[#a8abac]" src="/images/City Bike/City_collection_2_desktop.webp" alt="Logo on Product" loading="lazy" />
         </div>
-        <div className="absolute border rounded-lg text-3xl bg-white w-[550px] p-16 z-50 top-[140vh] left-80" >Our women&rsquo;s bicycles are for everyone who likes to combine style with performance. In this range, available are the Café Racer and the Robyn, both frames with a lower tube, making it easy to step through.</div>
+        <div className="absolute border rounded-lg text-3xl bg-white w-[550px] p-16 z-50 top-[140vh] left-80 font-montserrat-light text-[#908e8e]" >Our women&rsquo;s bicycles are for everyone who likes to combine style with performance. In this range, available are the Café Racer and the Robyn, both frames with a lower tube, making it easy to step through.</div>
       </section>
 
       {/* City Bike Carousel */}
@@ -42,7 +42,7 @@ const CityBike = () => {
         <div className="flex justify-between mb-96">
           <img className="w-[650px] h-full bg-[#a8abac]" src="/images/City Bike/City_collection_4_desktop.webp" alt="City collection" loading="lazy" />
           <img className="w-80 h-96 object-cover bg-[#a8abac]" src="/images/City Bike/City_collection_3_desktop.webp" alt="City collection" loading="lazy" />
-          <div className="absolute top-80 right-32 border rounded-lg text-3xl bg-white w-[470px] p-14 z-50 text-[#a8abac]" >Whether you like it easy or fast, we got both. Our men&rsquo;s range of bicycles combine modern clean design with great quality, so they&rsquo;re perfect for your daily city commute. Our men citybikes are the Caféracer, Caféchaser and the Berlin, but feel free to opt for a women&rsquo;s bike for that easy hop-on-hop-off Amsterdam style.</div>
+          <div className="absolute font-montserrat-light top-80 right-32 border rounded-lg text-3xl bg-white w-[470px] p-14 z-50 text-[#908e8e]" >Whether you like it easy or fast, we got both. Our men&rsquo;s range of bicycles combine modern clean design with great quality, so they&rsquo;re perfect for your daily city commute. Our men citybikes are the Caféracer, Caféchaser and the Berlin, but feel free to opt for a women&rsquo;s bike for that easy hop-on-hop-off Amsterdam style.</div>
 
           {/* <video className='w-[450px] absolute z-10 bottom-80 left-96 '
             muted autoPlay loading="lazy"  >
