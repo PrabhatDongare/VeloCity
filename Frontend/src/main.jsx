@@ -10,8 +10,8 @@ import ElectricBike from './Pages/ElectricBike.jsx'
 import CityBike from './Pages/CityBike.jsx'
 import Store from './Pages/Store.jsx'
 import Accessories from './Pages/Accessories.jsx'
-import LeaseEmployee from './Pages/Leasing/LeaseEmployer.jsx'
-import LeaseEmployer from './Pages/Leasing/LeaseEmployer.jsx'
+import Employees from './Pages/Leasing/Employees.jsx'
+import Employers from './Pages/Leasing/Employers.jsx'
 import Ace from './Pages/Products/Ace.jsx'
 import Ivy from './Pages/Products/Ivy.jsx'
 import ErrorPage from './Pages/ErrorPage.jsx'
@@ -47,11 +47,11 @@ const router = createBrowserRouter([
         element: <Account />,
       },
       {
-        path: "electricBike",
+        path: "electric-bike",
         element: <ElectricBike />,
       },
       {
-        path: "cityBike",
+        path: "city-bike",
         element: <CityBike />,
       },
       {
@@ -63,12 +63,12 @@ const router = createBrowserRouter([
         element: <Accessories />,
       },
       {
-        path: "leaseEmployer",
-        element: <LeaseEmployer />,
+        path: "bike-leasing",
+        element: <Employers />,
       },
       {
-        path: "leaseEmployee",
-        element: <LeaseEmployee />,
+        path: "leasing-form",
+        element: <Employees />,
       },
       {
         path: "products/ivy",

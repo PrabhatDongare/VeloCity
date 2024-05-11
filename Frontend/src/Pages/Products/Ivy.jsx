@@ -12,7 +12,7 @@ const Ivy = () => {
     <>
       <Header bg={false} />
       <Suspense fallback={<div className='text-center'>Loading...</div>}>
-        <IntroIvy scrollId={"ivy-specifications"} />
+        <IntroIvy scrollId={"specifications"} />
       </Suspense>
 
       {/* Content */}

@@ -4,6 +4,8 @@ import { TbBookDownload } from "react-icons/tb";
 import PropTypes from 'prop-types';
 
 const CustomVideo = React.lazy(() => import('./CustomVideo'));
+const InteractiveCycleDiagram = React.lazy(() => import('./InteractiveDiagram'));
+import { Ace_Two, Ivy_Two } from "../Utils/product"
 
 const ElectricMainContent = ({ productName }) => {
 
@@ -134,10 +136,16 @@ const ElectricMainContent = ({ productName }) => {
           <p className=' font-montserrat-regular'>The Shimano® discbrakes are premium hydraulic disc brakes designed to deliver lightning-fast stopping power, so you can ride with complete confidence and control. Rest assured, you&rsquo;ll feel the difference in the moments you need it most.</p>
         </div>
       </section>
+
+      <section className="mb-28 " >
+          <Suspense fallback={<div className='text-center'>Loading...</div>}>
+            <InteractiveCycleDiagram productLink={ productName == "Ace_Two" ? Ace_Two["Matte Black"][0] : Ivy_Two["Matte Black"][0] } />
+          </Suspense>
+      </section>
       <hr />
 
       {/* Product Specification */}
-      <section id="ace-specifications" className='ml-14 mr-28 text-[#727373] my-24 '>
+      <section id="specifications" className='ml-14 mr-28 text-[#727373] my-24 '>
         <h1 className='relative'><span className='text-6xl'>All in the details</span><span className="text-2xl absolute top-[35px]">&#9642;</span></h1>
 
         <div className='grid grid-flow-col gap-28 font-montserrat-medium my-16' >

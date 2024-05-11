@@ -15,7 +15,7 @@ const CarouselReviews = React.lazy(() => import('../Sections/Home/CarouselReview
 const Home = () => {
 
   return (
-    <> {/* bg-[#ebedee] */}
+    <>
       <Header />
       {/* Main TOP */}
       <section className='h-[93vh] text-white '>

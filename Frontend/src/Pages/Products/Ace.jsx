@@ -12,7 +12,7 @@ const Ace = () => {
     <>
       <Header bg={false} />
       <Suspense fallback={<div className='text-center'>Loading...</div>}>
-        <IntroAce scrollId={"ace-specifications"} />
+        <IntroAce scrollId={"specifications"} />
       </Suspense>
 
       {/* Content */}

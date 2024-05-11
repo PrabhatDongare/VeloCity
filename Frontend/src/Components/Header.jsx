@@ -77,21 +77,22 @@ const Header = ({bg}) => {
         </div>
 
         {listElectricBike && isWhite && <ul className={`absolute left-[202px] bg-white font-montserrat text-sm rounded-b-md animate-slideDown z-10`}>
-          <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] ' onClick={() => setListElectricBike(false)} ><Link to="/electricBike" className='py-3 pr-10 pl-4' >Overview</Link></li>
+          <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] ' onClick={() => setListElectricBike(false)} ><Link to="/electric-bike" className='py-3 pr-10 pl-4' >Overview</Link></li>
           <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] ' onClick={() => setListElectricBike(false)} ><Link to="/products/ivy" className=' pr-10 pl-4' >Ivy <sup className='text-[9px]'>TWO</sup> </Link></li>
           <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] rounded-b-md' onClick={() => setListElectricBike(false)} ><Link to="/products/ace" className=' pr-10 pl-4' >Ace <sup className='text-[9px] z-50'>TWO</sup></Link></li>
         </ul>}
 
         {listCityBike && isWhite && <ul className={`absolute left-[305px] bg-white font-montserrat text-sm rounded-b-md animate-slideDown z-10`}>
-          <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] ' onClick={() => setListCityBike(false)} ><Link to="/cityBike" className=' pr-10 pl-4' >Overview</Link></li>
+          <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] ' onClick={() => setListCityBike(false)} ><Link to="/city-bike" className=' pr-10 pl-4' >Overview</Link></li>
           <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] ' onClick={() => setListCityBike(false)}><Link to="/products/ace" className=' pr-10 pl-4' >WOMEN</Link></li>
           <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] ' onClick={() => setListCityBike(false)}><Link to="/products/ace" className=' pr-10 pl-4' >MEN</Link></li>
           <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] rounded-b-md'  onClick={() => setListCityBike(false)} ><Link to="/products/ace" className=' pr-10 pl-4' >KIDS</Link></li>
         </ul>}
+        
 
         {listLeasing && isWhite && <ul className={`absolute left-[565px] bg-white font-montserrat text-sm rounded-b-md animate-slideDown z-10`}>
-          <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee]' onClick={() => setListLeasing(false)} ><Link to="/leaseEmployer" className=' pr-10 pl-4' >Employer</Link></li>
-          <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] rounded-b-md' onClick={() => setListLeasing(false)} ><Link to="/leaseEmployee" className=' pr-10 pl-4' >Employee</Link></li>
+          <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee]' onClick={() => setListLeasing(false)} ><Link to="/bike-leasing" className=' pr-10 pl-4' >Employers</Link></li>
+          <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] rounded-b-md' onClick={() => setListLeasing(false)} ><Link to="/leasing-form" className=' pr-10 pl-4' >Employees</Link></li>
         </ul>}
       </header>
   )
