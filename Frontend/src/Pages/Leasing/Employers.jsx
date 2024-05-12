@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom';
+import { useForm } from "react-hook-form"
 
 import { IoIosArrowRoundDown } from "react-icons/io";
 
@@ -7,7 +8,10 @@ import Header from '../../Components/Header';
 
 
 const Employers = () => {
-  const [questionNo, setQuestionNo] = useState(0);
+  const [questionNo, setQuestionNo] = useState(0)
+  const [requestForm, setRequestForm] = useState(true)
+
+  const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm()
 
   const handleQ1 = () => {
     if (questionNo != 1) {
@@ -49,6 +53,21 @@ const Employers = () => {
     }
   }
 
+  const onSubmit = async (data) => {
+    try {
+      console.log(data)
+      setRequestForm(false)
+      reset()
+    } catch (error) {
+      console.error('Error occurred:', error);
+    }
+
+  }
+
+  const handleShowForm = () => {
+    setRequestForm(true)
+  }
+
   return (
     <>
       < Header />
@@ -65,7 +84,7 @@ const Employers = () => {
       </section>
 
       {/* Content 1 */}
-      <section id='leasing' className='mx-14 mt-24 mb-36 flex gap-20 '>
+      <section className='mx-14 mt-24 mb-36 flex gap-20 '>
         <img src="/images/Employers/Leasing_desktop_mobile.webp" alt="Ivy Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
         <div className='w-1/2 pl-28 pr-10 my-auto'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Lease bikes</h1>
@@ -86,7 +105,7 @@ const Employers = () => {
 
       {/* Content 3 */}
       <section className='mx-14 mt-24 mb-36 flex gap-20 '>
-        <img src="/images/Employers/Leasing_desktop_mobile.webp" alt="Ivy Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
+        <img src="/images/Home/carlanicieza.webp" alt="Ivy Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
         <div className='w-1/2 pl-28 pr-10 my-auto font-montserrat-regular text-[#a1a2a1]'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>How it works</h1>
 
@@ -105,8 +124,115 @@ const Employers = () => {
       </section>
 
       {/* Form */}
-      <section className='mb-14' >
-        <h1 className='text-5xl font-montserrat-medium text-center'>Get in touch</h1>
+      <section className='mb-14 mx-auto w-4/6' >
+        <h1 id='leasing' className='text-5xl font-montserrat-medium text-center'>Get in touch</h1>
+        {requestForm ? <form onSubmit={handleSubmit(onSubmit)} className='pt-16 flex flex-col gap-10 font-montserrat-light text-sm'>
+          {/* First Name */}
+          <div className='flex flex-col gap-3' >
+            <input {...register("firstName", {
+              required: { value: true, message: "* This field is required" },
+              minLength: { value: 3, message: "* min 3 character required" },
+              maxLength: { value: 30, message: "* max 30 character allowed" },
+              pattern: {
+                value: /^[a-zA-Z]+$/,
+                message: "* invalid entry"
+              }
+            })} className='p-4 border' placeholder='First name' />
+            {errors.firstName && <span className='text-red-500'>{errors.firstName.message}</span>}
+          </div>
+
+          {/* Last Name */}
+          <div className='flex flex-col gap-3' >
+            <input {...register("lastName", {
+              required: { value: true, message: "* This field is required" },
+              minLength: { value: 3, message: "* min 3 character required" },
+              maxLength: { value: 30, message: "* max 30 character allowed" },
+              pattern: {
+                value: /^[a-zA-Z]+$/,
+                message: "* invalid entry"
+              }
+            })} className='p-4 border' placeholder='Last name' />
+            {errors.lastName && <span className='text-red-500'>{errors.lastName.message}</span>}
+          </div>
+
+          {/* Email */}
+          <div className='flex flex-col gap-3'  >
+            <input {...register("email", {
+              required: { value: true, message: "* This field is required" },
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "* invalid email address"
+              }
+            })} className='p-4 border' placeholder='E-mail' />
+            {errors.email && <span className='text-red-500'>{errors.email.message}</span>}
+          </div>
+
+          {/* Phone Number */}
+          <div className='flex flex-col gap-3'  >
+            <input {...register("phoneNo", {
+              required: { value: true, message: "* This field is required" },
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "* invalid Phone Number"
+              }
+            })} className='p-4 border' placeholder='Phone number' />
+            {errors.phoneNo && <span className='text-red-500'>{errors.phoneNo.message}</span>}
+          </div>
+
+          {/* Company Name */}
+          <div className='flex flex-col gap-3' >
+            <input {...register("companyName", {
+              required: { value: true, message: "* This field is required" },
+              minLength: { value: 3, message: "* min 3 character required" },
+              maxLength: { value: 30, message: "* max 30 character allowed" },
+              pattern: {
+                value: /^[a-zA-Z]+$/,
+                message: "* invalid entry"
+              }
+            })} className='p-4 border' placeholder='Company name' />
+            {errors.companyName && <span className='text-red-500'>{errors.companyName.message}</span>}
+          </div>
+
+          {/* Number of Employees */}
+          <div className='flex flex-col gap-3'  >
+            <input {...register("employeeCount", {
+              required: { value: true, message: "* This field is required" },
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "* invalid number of bikes"
+              }
+            })} className='p-4 border' placeholder='Number of Employees' />
+            {errors.employeeCount && <span className='text-red-500'>{errors.employeeCount.message}</span>}
+          </div>
+
+          {/* Number of Bikes */}
+          <div className='flex flex-col gap-3'  >
+            <input {...register("bikeCount", {
+              required: { value: true, message: "* This field is required" },
+              pattern: {
+                value: /^[0-9]+$/,
+                message: "* invalid number of bikes"
+              }
+            })} className='p-4 border' placeholder='Number of Bikes' />
+            {errors.bikeCount && <span className='text-red-500'>{errors.bikeCount.message}</span>}
+          </div>
+
+          {/* How can we help */}
+          <div className='flex flex-col gap-3'>
+            <textarea {...register("message")}
+              className='p-4 border' placeholder='How can we help?' rows={11} />
+            {errors.message && <span className='text-red-500'>{errors.message.message}</span>}
+          </div>
+          {/* Submit */}
+          <input disabled={isSubmitting} type="submit" className='cursor-pointer bg-[#898a8a] rounded-full text-white p-3 font-montserrat-medium' />
+        </form>
+          :
+          <div className='font-montserrat-regular text-center pt-16'>
+            <p className='font-montserrat-medium '>Thank you for your request.</p>
+            <p className='py-7' >We will Process the request as soon as possible.</p>
+            <button onClick={handleShowForm} className='bg-black text-white px-4 py-2.5 rounded-full shadow-md hover:shadow-xl' >Return to form</button>
+          </div>
+        }
 
       </section>
       <hr />
