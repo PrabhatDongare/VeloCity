@@ -11,16 +11,14 @@ const Accessories = () => {
   const cardData1 = [
     { id: 1, url: "/images/Accessories/Set 1/Frame_50.webp", title: "Front Carrier Black", price: 59.95 },
     { id: 2, url: "/images/Accessories/Set 1/Frame_179.webp", title: "Front Carrier Black", price: 62.45 },
-    { id: 3, url: "/images/Accessories/Set 1/Frame_41.webp", title: "Front Carrier Black", price: 91.50 },
-    { id: 4, url: "/images/Accessories/Set 1/Frame_163.webp", title: "Front Carrier Black", price: 93.5 },
-    { id: 5, url: "/images/Accessories/Set 1/Basket_Epic_Multi_desktop.webp", title: "Front Carrier Black", price: 52.95 },
-    { id: 6, url: "/images/Accessories/Set 1/Basket_Epic_Retro_desktop.webp", title: "Front Carrier Black", price: 49.95 },
-    { id: 7, url: "/images/Accessories/Set 1/Frame_76.webp", title: "Front Carrier Black", price: 19.95 },
-    { id: 8, url: "/images/Accessories/Set 1/PDP_-_DESKTOP-1.webp", title: "Front Carrier Black", price: 39.95 },
-    { id: 9, url: "/images/Accessories/Set 1/Frame_59.webp", title: "Front Carrier Black", price: 39.50 },
-    { id: 10, url: "/images/Accessories/Set 1/Front_carrier_matte_black_desktop.webp", title: "Front Carrier Black", price: 59.95 },
+    { id: 3, url: "/images/Accessories/Set 1/Basket_Epic_Multi_desktop.webp", title: "Front Carrier Black", price: 52.95 },
+    { id: 4, url: "/images/Accessories/Set 1/Basket_Epic_Retro_desktop.webp", title: "Front Carrier Black", price: 49.95 },
+    { id: 5, url: "/images/Accessories/Set 1/Frame_76.webp", title: "Front Carrier Black", price: 19.95 },
+    { id: 6, url: "/images/Accessories/Set 1/PDP_-_DESKTOP-1.webp", title: "Front Carrier Black", price: 39.95 },
+    { id: 7, url: "/images/Accessories/Set 1/Frame_59.webp", title: "Front Carrier Black", price: 39.50 },
+    { id: 8, url: "/images/Accessories/Set 1/Front_carrier_matte_black_desktop.webp", title: "Front Carrier Black", price: 59.95 },
   ]
-
+  
   const cardData2 = [
     { id: 1, url: "/images/Accessories/Set 2/Frame_61.webp", title: "Front Carrier Black", price: 13.95 },
     { id: 2, url: "/images/Accessories/Set 2/Frame_62.webp", title: "Front Carrier Black", price: 13.95 },
@@ -30,6 +28,8 @@ const Accessories = () => {
     { id: 6, url: "/images/Accessories/Set 2/Frame_70.webp", title: "Front Carrier Black", price: 27 },
     { id: 7, url: "/images/Accessories/Set 2/Frame_73.webp", title: "Front Carrier Black", price: 49.95 },
     { id: 8, url: "/images/Accessories/Set 2/AXA_Framelock_140CM_Chain_desktop.webp", title: "Front Carrier Black", price: 55.25 },
+    { id: 9, url: "/images/Accessories/Set 2/Frame_41.webp", title: "Front Carrier Black", price: 91.50 },
+    { id: 10, url: "/images/Accessories/Set 2/Frame_163.webp", title: "Front Carrier Black", price: 93.5 },
   ]
 
   return (

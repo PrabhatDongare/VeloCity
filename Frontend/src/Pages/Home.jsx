@@ -65,7 +65,7 @@ const Home = () => {
 
       {/* Store Locations */}
       <section className="relative h-[125vh] text-white font-montserrat-medium" >
-        < img src="/images/Home/Store_map.webp" alt="map" className="absolute -z-50 bg-[#ebedee]" loading='lazy' />
+        < img src="/Common/Store_map.webp" alt="map" className="absolute -z-50 bg-[#ebedee]" loading='lazy' />
         <div className="px-36 pt-48 w-6/12">
           <p className="text-6xl mb-8 " >Discover your local VeloCity partner store</p>
           <p className="w-5/6" >Our partner stores across the Netherlands are there for you. Whether you&rsquo;re looking to pick up a newly ordered bike, need a fix, or want to test ride our Ivy or Ace Two, your ideal biking experience is closer than you think.</p>

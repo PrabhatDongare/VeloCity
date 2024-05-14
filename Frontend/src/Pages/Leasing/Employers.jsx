@@ -137,7 +137,7 @@ const Employers = () => {
                 value: /^[a-zA-Z]+$/,
                 message: "* invalid entry"
               }
-            })} className='p-4 border' placeholder='First name' />
+            })} className='p-4 border placeholder-black' placeholder='First name' />
             {errors.firstName && <span className='text-red-500'>{errors.firstName.message}</span>}
           </div>
 
@@ -151,7 +151,7 @@ const Employers = () => {
                 value: /^[a-zA-Z]+$/,
                 message: "* invalid entry"
               }
-            })} className='p-4 border' placeholder='Last name' />
+            })} className='p-4 border placeholder-black' placeholder='Last name' />
             {errors.lastName && <span className='text-red-500'>{errors.lastName.message}</span>}
           </div>
 
@@ -163,7 +163,7 @@ const Employers = () => {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: "* invalid email address"
               }
-            })} className='p-4 border' placeholder='E-mail' />
+            })} className='p-4 border placeholder-black' placeholder='E-mail' />
             {errors.email && <span className='text-red-500'>{errors.email.message}</span>}
           </div>
 
@@ -175,7 +175,7 @@ const Employers = () => {
                 value: /^[0-9]+$/,
                 message: "* invalid Phone Number"
               }
-            })} className='p-4 border' placeholder='Phone number' />
+            })} className='p-4 border placeholder-black' placeholder='Phone number' />
             {errors.phoneNo && <span className='text-red-500'>{errors.phoneNo.message}</span>}
           </div>
 
@@ -189,7 +189,7 @@ const Employers = () => {
                 value: /^[a-zA-Z]+$/,
                 message: "* invalid entry"
               }
-            })} className='p-4 border' placeholder='Company name' />
+            })} className='p-4 border placeholder-black' placeholder='Company name' />
             {errors.companyName && <span className='text-red-500'>{errors.companyName.message}</span>}
           </div>
 
@@ -201,7 +201,7 @@ const Employers = () => {
                 value: /^[0-9]+$/,
                 message: "* invalid number of bikes"
               }
-            })} className='p-4 border' placeholder='Number of Employees' />
+            })} className='p-4 border placeholder-black' placeholder='Number of Employees' />
             {errors.employeeCount && <span className='text-red-500'>{errors.employeeCount.message}</span>}
           </div>
 
@@ -213,14 +213,14 @@ const Employers = () => {
                 value: /^[0-9]+$/,
                 message: "* invalid number of bikes"
               }
-            })} className='p-4 border' placeholder='Number of Bikes' />
+            })} className='p-4 border placeholder-black' placeholder='Number of Bikes' />
             {errors.bikeCount && <span className='text-red-500'>{errors.bikeCount.message}</span>}
           </div>
 
           {/* How can we help */}
           <div className='flex flex-col gap-3'>
             <textarea {...register("message")}
-              className='p-4 border' placeholder='How can we help?' rows={11} />
+              className='p-4 border placeholder-black' placeholder='How can we help?' rows={11} />
             {errors.message && <span className='text-red-500'>{errors.message.message}</span>}
           </div>
           {/* Submit */}

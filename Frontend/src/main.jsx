@@ -5,6 +5,7 @@ import App from './App.jsx'
 import Home from './Pages/Home.jsx'
 import Login from './Pages/Auth/Login.jsx'
 import Signup from './Pages/Auth/Signup.jsx'
+import ForgotPassword from './Pages/Auth/ForgotPassword.jsx'
 import Account from './Pages/Account.jsx'
 import ElectricBike from './Pages/ElectricBike.jsx'
 import CityBike from './Pages/CityBike.jsx'
@@ -35,12 +36,16 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "login",
+        path: "/account/login",
         element: <Login />,
       },
       {
-        path: "signup",
+        path: "/account/signup",
         element: <Signup />,
+      },
+      {
+        path: "/account/forgot-password",
+        element: <ForgotPassword />,
       },
       {
         path: "account",

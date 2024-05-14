@@ -45,78 +45,127 @@ const Employees = () => {
       </section>
 
       {/* Leasing Form */}
-      <section  className='w-4/6 mx-auto'>
+      <section className='w-4/6 mx-auto'>
         <h1 id='leasing' className='my-16 text-5xl font-montserrat-medium text-center relative'>
           <span>Lease your Ivy or Ace</span>
           <span className="text-xl font-montserrat-medium absolute ml-0.5">Two</span>
         </h1>
+        <form onSubmit={handleSubmit(onSubmit)} className='mb-14 flex flex-col gap-10 font-montserrat-light text-sm  '>
 
-        <form onSubmit={handleSubmit(onSubmit)} className='mb-14 flex flex-col gap-10 font-montserrat-medium text-sm  '>
+          {/* Select a country */}
+          <div className='flex flex-col gap-3'>
+            <select {...register("country", {
+              required: { value: true, message: "* Country selection is required" }
+            })} className='p-4 border' placeholder='Select' >
+              <option value="">Select a country</option>
+              <option value="Netherlands">Netherlands</option>
+              <option value="UK">Belgium</option>
+              <option value="US">France</option>
+            </select>
+            {errors.country && <span className='text-red-500'>{errors.country.message}</span>}
+          </div>
+
           {/* First Name */}
           <div className='flex flex-col gap-3' >
             <input {...register("firstName", {
-              required: { value: true, message: "* This field is required" },
+              required: { value: true, message: "* First Name is required" },
               minLength: { value: 3, message: "* min 3 character required" },
               maxLength: { value: 30, message: "* max 30 character allowed" },
               pattern: {
                 value: /^[a-zA-Z]+$/,
                 message: "* invalid entry"
               }
-            })} className='p-4 border ' placeholder='First name' />
+            })} className='p-4 border placeholder-black' placeholder='First name' />
             {errors.firstName && <span className='text-red-500'>{errors.firstName.message}</span>}
           </div>
 
           {/* Last Name */}
           <div className='flex flex-col gap-3' >
             <input {...register("lastName", {
-              required: { value: true, message: "* This field is required" },
+              required: { value: true, message: "* Last Name is required" },
               minLength: { value: 3, message: "* min 3 character required" },
               maxLength: { value: 30, message: "* max 30 character allowed" },
               pattern: {
                 value: /^[a-zA-Z]+$/,
                 message: "* invalid entry"
               }
-            })} className='p-4 border' placeholder='Last name' />
+            })} className='p-4 border placeholder-black' placeholder='Last name' />
             {errors.lastName && <span className='text-red-500'>{errors.lastName.message}</span>}
           </div>
 
           {/* Email */}
           <div className='flex flex-col gap-3'  >
             <input {...register("email", {
-              required: { value: true, message: "* This field is required" },
+              required: { value: true, message: "* Email is required" },
               pattern: {
                 value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
                 message: "* invalid email address"
               }
-            })} className='p-4 border' placeholder='E-mail' />
+            })} className='p-4 border placeholder-black' placeholder='E-mail' />
             {errors.email && <span className='text-red-500'>{errors.email.message}</span>}
           </div>
 
           {/* Phone Number */}
           <div className='flex flex-col gap-3'  >
             <input {...register("phoneNo", {
-              required: { value: true, message: "* This field is required" },
+              required: { value: true, message: "* Phone Number is required" },
               pattern: {
                 value: /^[0-9]+$/,
                 message: "* invalid Phone Number"
               }
-            })} className='p-4 border' placeholder='Phone number' />
+            })} className='p-4 border placeholder-black' placeholder='Phone number' />
             {errors.phoneNo && <span className='text-red-500'>{errors.phoneNo.message}</span>}
           </div>
 
           {/* Company Name */}
           <div className='flex flex-col gap-3' >
             <input {...register("companyName", {
-              required: { value: true, message: "* This field is required" },
+              required: { value: true, message: "* Company Name is required" },
               minLength: { value: 3, message: "* min 3 character required" },
               maxLength: { value: 30, message: "* max 30 character allowed" },
               pattern: {
                 value: /^[a-zA-Z]+$/,
                 message: "* invalid entry"
               }
-            })} className='p-4 border' placeholder='Company name' />
+            })} className='p-4 border placeholder-black' placeholder='Company name' />
             {errors.companyName && <span className='text-red-500'>{errors.companyName.message}</span>}
           </div>
+
+          {/* Delivery address */}
+          <div className='flex flex-col gap-3'>
+            <div className='flex flex-row gap-3'>
+              <input {...register("streetAddress", { required: { value: true, message: "* Street Address is required" } })}
+                className='p-4 border placeholder-black' placeholder='Street Address' />
+
+              <input
+                {...register("houseNumber", {
+                  required: { value: true, message: "* House number is required" }
+                })}
+                className='p-4 border placeholder-black'
+                placeholder='House Number'
+              />
+
+              <input
+                {...register("postcode", {
+                  required: { value: true, message: "* Postcode is required" }
+                })}
+                className='p-4 border placeholder-black'
+                placeholder='Postcode'
+              />
+
+              <input
+                {...register("city", {
+                  required: { value: true, message: "* City is required" }
+                })}
+                className='p-4 border placeholder-black'
+                placeholder='City'
+              />
+            </div>{
+              errors.streetAddress && <span className='text-red-500'>{errors.streetAddress.message}</span> ||
+              errors.houseNumber && <span className='text-red-500'>{errors.houseNumber.message}</span> ||
+              errors.postcode && <span className='text-red-500'>{errors.postcode.message}</span> ||
+              errors.city && <span className='text-red-500'>{errors.city.message}</span>
+            }</div>
 
           {/* Submit */}
           <input disabled={isSubmitting} type="submit" className='cursor-pointer bg-[#898a8a] rounded-full text-white p-3 font-montserrat-medium' />

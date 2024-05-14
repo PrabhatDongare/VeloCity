@@ -71,7 +71,7 @@ const Header = ({bg}) => {
           </div>
 
           <ul className='flex'>
-            <li className="pr-14"><Link to="/login"><CiUser className="text-xl" /></Link></li>
+            <li className="pr-14"><Link to="/account/login"><CiUser className="text-xl" /></Link></li>
             <li className=""><Link to="/account"><HiShoppingBag className="text-xl" /></Link></li>
           </ul>
         </div>
