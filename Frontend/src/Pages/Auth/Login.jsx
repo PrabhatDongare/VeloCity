@@ -15,8 +15,9 @@ const Login = () => {
     reset()
   }
 
-  const handleBtn = () => {
-    console.log("Forgot Password clicked")
+  const handleSignUp = () => {
+    // console.log("Forgot Password clicked")
+    navigate("/account/signup")
   }
 
   const handleForgetPassword = () => {
@@ -63,7 +64,7 @@ const Login = () => {
           </div>
 
           <input disabled={isSubmitting} type="submit" className='w-full border rounded-full py-3 hover:bg-black hover:text-white cursor-pointer ' />
-          <input type="button" value='Create an account' onClick={handleBtn} className='w-full border rounded-full py-3 hover:bg-black hover:text-white cursor-pointer ' />
+          <input type="button" value='Create an account' onClick={handleSignUp} className='w-full border rounded-full py-3 hover:bg-black hover:text-white cursor-pointer ' />
           {errors.password && <div className=' mx-auto text-sm flex items-end text-red-500'>{errors.password.message}</div>}
         </form>
       </section>

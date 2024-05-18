@@ -132,12 +132,12 @@ const Employers = () => {
             <input {...register("firstName", {
               required: { value: true, message: "* This field is required" },
               minLength: { value: 3, message: "* min 3 character required" },
-              maxLength: { value: 30, message: "* max 30 character allowed" },
+              maxLength: { value: 20, message: "* max 20 character allowed" },
               pattern: {
                 value: /^[a-zA-Z]+$/,
                 message: "* invalid entry"
               }
-            })} className='p-4 border placeholder-black' placeholder='First name' />
+            })} className='p-4 border placeholder-black' placeholder='First name' width={21} />
             {errors.firstName && <span className='text-red-500'>{errors.firstName.message}</span>}
           </div>
 
@@ -146,12 +146,12 @@ const Employers = () => {
             <input {...register("lastName", {
               required: { value: true, message: "* This field is required" },
               minLength: { value: 3, message: "* min 3 character required" },
-              maxLength: { value: 30, message: "* max 30 character allowed" },
+              maxLength: { value: 20, message: "* max 20 character allowed" },
               pattern: {
                 value: /^[a-zA-Z]+$/,
                 message: "* invalid entry"
               }
-            })} className='p-4 border placeholder-black' placeholder='Last name' />
+            })} className='p-4 border placeholder-black' placeholder='Last name' width={21} />
             {errors.lastName && <span className='text-red-500'>{errors.lastName.message}</span>}
           </div>
 

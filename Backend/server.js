@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors')
-const connectDB = require('./config/connectDB')
+// const connectDB = require('./config/connectDB')
 
 // .env
 const dotenv = require('dotenv');
@@ -24,8 +24,8 @@ app.get('/', async (req, res) => {
 });
 
 // Routes
-const routes = require('./routes/api')
-app.use(routes);
+// const routes = require('./routes/api')
+// app.use(routes);
 
 
 app.listen(port, async () => {
