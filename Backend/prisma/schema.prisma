@@ -6,3 +6,122 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+// User table
+model User {
+  id         Int       @id @default(autoincrement())
+  role_name  String
+  first_name String
+  last_name  String
+  email      String    @unique
+  password   String
+  status     String    @default("inactive")
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  addresses  Address[]
+  carts      Cart[]
+  orders     Order[]
+  // newsletters  NewsLetter[]
+}
+
+// Category table
+model Category {
+  id            Int       @id @default(autoincrement())
+  category_name String
+  products      Product[]
+}
+
+// Product table
+model Product {
+  id             Int             @id @default(autoincrement())
+  category       Category        @relation(fields: [category_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  category_id    Int
+  product_name   String
+  description    String
+  productDetails ProductDetail[]
+  accessories    Accessory[]
+}
+
+// ProductDetail table
+model ProductDetail {
+  id         Int     @id @default(autoincrement())
+  product    Product @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product_id Int
+  color      String
+  price      Float
+  quantity   Int
+  status     String
+}
+
+// Accessory table
+model Accessory {
+  id             Int     @id @default(autoincrement())
+  product        Product @relation(fields: [product_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  product_id     Int
+  accessory_name String
+  price          Float
+  quantity       Int
+  description    String
+  url_slug       String
+}
+
+// Address table
+model Address {
+  id          Int     @id @default(autoincrement())
+  user        User    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id     Int
+  street_name String
+  additional  String?
+  zipcode     String
+  city        String
+  country     String
+  orders      Order[]
+}
+
+// Cart table
+model Cart {
+  id           Int    @id @default(autoincrement())
+  user         User   @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id      Int
+  item_type    String
+  item_id      Int
+  quantity     Int
+  price        Float
+  total_amount Float
+}
+
+// Order table
+model Order {
+  id               Int         @id @default(autoincrement())
+  order_no         String
+  user             User        @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  user_id          Int
+  total_amount     Float
+  shipping_charges Float
+  net_amount       Float
+  address          Address     @relation(fields: [address_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  address_id       Int
+  payment_id       Int?
+  status           String
+  created_date     DateTime    @default(now())
+  orderItems       OrderItem[]
+}
+
+// OrderItem table
+model OrderItem {
+  id        Int    @id @default(autoincrement())
+  order     Order  @relation(fields: [order_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  order_id  Int
+  item_type String
+  item_id   Int
+  quantity  Int
+  price     Float
+}
+
+// NewsLetter Subscribed table
+// model NewsLetter {
+//   id    Int    @id @default(autoincrement())
+//   email String
+//   user        User    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
+//   user_id     Int?
+// }

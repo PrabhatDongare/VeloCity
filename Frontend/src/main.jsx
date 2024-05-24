@@ -6,6 +6,7 @@ import Home from './Pages/Home.jsx'
 import Login from './Pages/Auth/Login.jsx'
 import Signup from './Pages/Auth/Signup.jsx'
 import ForgotPassword from './Pages/Auth/ForgotPassword.jsx'
+import ResetPassword from './Pages/Auth/ResetPassword.jsx'
 import Account from './Pages/Account.jsx'
 import ElectricBike from './Pages/ElectricBike.jsx'
 import CityBike from './Pages/CityBike.jsx'
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/account/forgot-password",
         element: <ForgotPassword />,
+      },
+      {
+        path: "/account/reset-password/:id/:token",
+        element: <ResetPassword />,
       },
       {
         path: "account",
