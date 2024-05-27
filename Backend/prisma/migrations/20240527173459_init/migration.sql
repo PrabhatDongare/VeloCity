@@ -26,6 +26,7 @@ CREATE TABLE "Product" (
 CREATE TABLE "ProductDetail" (
     "id" SERIAL NOT NULL,
     "product_id" INTEGER NOT NULL,
+    "url_slug" TEXT NOT NULL,
     "color" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "quantity" INTEGER NOT NULL,
@@ -39,22 +40,13 @@ CREATE TABLE "Accessory" (
     "id" SERIAL NOT NULL,
     "section" INTEGER NOT NULL,
     "accessory_name" TEXT NOT NULL,
+    "url_slug" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "quantity" INTEGER NOT NULL,
     "description" TEXT NOT NULL,
-    "url_slug" TEXT NOT NULL,
     "status" TEXT NOT NULL,
 
     CONSTRAINT "Accessory_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "ProductAccessory" (
-    "id" SERIAL NOT NULL,
-    "productId" INTEGER NOT NULL,
-    "accessoryId" INTEGER NOT NULL,
-
-    CONSTRAINT "ProductAccessory_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -75,7 +67,7 @@ CREATE TABLE "Cart" (
     "id" SERIAL NOT NULL,
     "user_id" INTEGER NOT NULL,
     "item_type" TEXT NOT NULL,
-    "item_id" INTEGER NOT NULL,
+    "url_slug" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "total_amount" DOUBLE PRECISION NOT NULL,
@@ -93,8 +85,9 @@ CREATE TABLE "Order" (
     "net_amount" DOUBLE PRECISION NOT NULL,
     "address_id" INTEGER NOT NULL,
     "payment_id" INTEGER,
-    "status" TEXT NOT NULL,
+    "status" TEXT NOT NULL DEFAULT 'Un-paid',
     "created_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updated_at" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Order_pkey" PRIMARY KEY ("id")
 );
@@ -104,7 +97,7 @@ CREATE TABLE "OrderItem" (
     "id" SERIAL NOT NULL,
     "order_id" INTEGER NOT NULL,
     "item_type" TEXT NOT NULL,
-    "item_id" INTEGER NOT NULL,
+    "url_slug" TEXT NOT NULL,
     "quantity" INTEGER NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
 
@@ -115,16 +108,16 @@ CREATE TABLE "OrderItem" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ProductAccessory_productId_accessoryId_key" ON "ProductAccessory"("productId", "accessoryId");
+CREATE UNIQUE INDEX "ProductDetail_url_slug_key" ON "ProductDetail"("url_slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Accessory_url_slug_key" ON "Accessory"("url_slug");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Order_order_no_key" ON "Order"("order_no");
 
 -- AddForeignKey
 ALTER TABLE "ProductDetail" ADD CONSTRAINT "ProductDetail_product_id_fkey" FOREIGN KEY ("product_id") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ProductAccessory" ADD CONSTRAINT "ProductAccessory_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ProductAccessory" ADD CONSTRAINT "ProductAccessory_accessoryId_fkey" FOREIGN KEY ("accessoryId") REFERENCES "Accessory"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Address" ADD CONSTRAINT "Address_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

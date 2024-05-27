@@ -78,12 +78,12 @@ exports.checkout = async function (req, res) {
 exports.get = async function (req, res) {
     try {
         const user_id = req.user.id;
-        
+
         // Find order
         const order = await prisma.order.findFirst({
             where: { user_id }
         })
-        if(!order){
+        if (!order) {
             return res.status(404).json({ success: false, message: 'No such order exists' });
         }
 
@@ -99,17 +99,129 @@ exports.get = async function (req, res) {
     }
 }
 
-// UPDATE ORDERS (AFTER PAYMENT)
-exports.paid = async function (req, res) {
+// UPDATE ORDER
+exports.update = async function (req, res) {
     try {
         const user_id = req.user.id;
-        const { payment_id } = req.body
-        const order = await prisma.order.update({
-            where: { user_id },
-            data: {payment_id , status: "Paid"}
-        })
-        if(!order){
+        const { item_type, url_slug, quantityInc } = req.body;
+
+        // Check for Un-paid order
+        const customerOrder = await prisma.order.findFirst({
+            where: { user_id, status: "Un-paid" }
+        });
+
+        if (!customerOrder) {
+            return res.status(404).json({ success: false, message: `No unpaid order found` });
+        }
+
+        // Check if orderItem exists
+        const customerOrderItem = await prisma.orderItem.findFirst({
+            where: { order_id: customerOrder.id, url_slug }
+        });
+
+        if (!customerOrderItem) {
+            return res.status(404).json({ success: false, message: "No such order item exists" });
+        }
+
+        // Determine the table
+        let table;
+        if (item_type === "Product") {
+            table = "productDetail";
+        } else {
+            table = "accessory";
+        }
+
+        const searchItem = await prisma[table].findFirst({
+            where: { url_slug }
+        });
+
+        if (!searchItem) {
+            return res.status(404).json({ success: false, message: "Item doesn't exist" });
+        }
+
+        let new_total_amount = customerOrder.total_amount;
+        let updated_quantity = customerOrderItem.quantity;
+
+        if (quantityInc) {
+            // Check for stock and increase quantity
+            if (customerOrderItem.quantity + 1 > searchItem.quantity) {
+                return res.status(404).json({ success: false, message: "Out of Stock" });
+            }
+            updated_quantity += 1;
+            new_total_amount += searchItem.price;
+        } else {
+            // Decrease quantity
+            if (customerOrderItem.quantity > 1) {
+                updated_quantity -= 1;
+                new_total_amount -= searchItem.price;
+            } else {
+                return res.status(400).json({ success: false, message: "Cannot decrease quantity below 1" });
+            }
+        }
+
+        // Update OrderItem
+        const updatedOrderItem = await prisma.orderItem.update({
+            where: { id: customerOrderItem.id },
+            data: { quantity: updated_quantity }
+        });
+
+        // Update Order
+        const new_net_amount = customerOrder.shipping_charges + new_total_amount;
+        const updatedOrder = await prisma.order.update({
+            where: { id: customerOrder.id },
+            data: { total_amount: new_total_amount, net_amount: new_net_amount }
+        });
+
+        res.status(200).json({ success: true, updatedOrder, updatedOrderItem, message: 'Order updated' });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+};
+
+// UPDATE ORDERS (AFTER PAYMENT), reduce quantity from stock
+exports.paid = async function (req, res) {
+    try {
+        const { payment_id, order_id } = req.body
+
+        // Check if the order exists
+        const order = await prisma.order.findFirst({
+            where: { id: order_id }
+        });
+
+        if (!order) {
             return res.status(404).json({ success: false, message: 'No such order exists' });
+        }
+
+        // Update the order to mark it as paid
+        const updatedOrder = await prisma.order.update({
+            where: { id: order_id },
+            data: { payment_id, status: "Paid" }
+        });
+
+        // Get the order items for the order
+        const orderItems = await prisma.orderItem.findMany({
+            where: { order_id }
+        })
+        if (orderItems.length < 1) {
+            return res.status(404).json({ success: false, message: 'No such order exists' });
+        }
+
+        // Update the inventory for each order item
+        for (const item of orderItems) {
+            let table;
+            if (item.item_type === "Product") {
+                table = "productDetail"
+            }
+            else {
+                table = "accessory"
+            }
+            // Update the inventory
+            await prisma[table].update({
+                where: { url_slug: item.url_slug },
+                data: { quantity: { decrement: item.quantity } }
+            })
         }
         res.status(200).json({ success: true, order, message: 'Order found successfully' });
 
@@ -119,19 +231,32 @@ exports.paid = async function (req, res) {
     }
 }
 
-// UPDATE ORDER
-exports.update = async function (req, res) {
-    try {
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-}
-
 // DELETE ORDER
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
+
 exports.deleteItem = async function (req, res) {
     try {
+        const { order_id } = req.body;
+
+        // Check for order
+        const order = await prisma.order.findFirst({
+            where: { id: order_id }
+        });
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'No such order exists' });
+        }
+
+        // Delete order items
+        await prisma.orderItem.deleteMany({
+            where: { order_id }
+        });
+
+        // Delete the order
+        await prisma.order.delete({
+            where: { id: order_id }
+        });
+        res.status(200).json({ success: true, message: 'Order deleted successfully' });
 
     } catch (error) {
         console.error(error);
