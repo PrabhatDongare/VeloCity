@@ -1,11 +1,13 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import Header from '../../Components/Header'
 
 const IntroAce = React.lazy(() => import('../../Sections/Products/IntroAce'));
 const ElectricMainContent = React.lazy(() => import('../../Components/ElectricMainContent'));
 
-
 const Ace = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
 
   return (

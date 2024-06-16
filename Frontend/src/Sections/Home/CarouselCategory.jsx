@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
+import { Link } from 'react-router-dom';
 
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 
@@ -87,8 +88,8 @@ const CarouselCategory = () => {
                 <img src="/images/Home/City_bikes_Women.webp" alt="City Bikes" width={510} className="pt-4 pb-7 mx-auto" loading='lazy' />
               </div>
             }
-            <button className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</button>
-            <button className="text-xs underline pl-10 underline-offset-2">Learn More</button>
+            <Link to="/city-bike" className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
+            <Link to="/city-bike" className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
           </div>
 
           {/* Card 2 */}
@@ -99,8 +100,8 @@ const CarouselCategory = () => {
             </p>
             <span>Ages 1,5 & 8</span>
             <img src="/images/Home/Homepage_Kids_desktop.webp" alt="Kids Bike" width={510} className="pt-4 pb-7 mx-auto" loading='lazy' />
-            <button className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</button>
-            <button className="text-xs underline pl-10 underline-offset-2">Learn More</button>
+            <Link to="/city-bike" className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
+            <Link to="/city-bike" className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
           </div>
           
           {/* Card 3 */}
@@ -108,7 +109,7 @@ const CarouselCategory = () => {
             <p className="text-3xl mb-5">Accessories</p>
             <span>Discover our assortment</span>
             <img src="/images/Home/Accessories.webp" alt="Accessories" width={510} className="pt-4 pb-7 mx-auto" loading='lazy' />
-            <button className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</button>
+            <Link to="/city-bike" className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
           </div>
           
         </Carousel>

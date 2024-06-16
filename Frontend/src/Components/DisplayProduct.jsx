@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { Ace_Two, Ivy_Two } from "../Utils/product";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
@@ -9,6 +11,8 @@ const DisplayProduct = () => {
     const [indexProduct2, setIndexProduct2] = useState(0);
     const [colorProduct1, setColorProduct1] = useState(Ace_Two["Matte Black"]);
     const [colorProduct2, setColorProduct2] = useState(Ivy_Two["Matte Black"]);
+
+    const navigate = useNavigate()
   
     const handleNextProduct1 = () => {
       setIndexProduct1((prevIndex) => (prevIndex + 1) % colorProduct1.length);
@@ -25,6 +29,10 @@ const DisplayProduct = () => {
       setIndexProduct2((prevIndex) => (prevIndex - 1 + colorProduct2.length) % colorProduct2.length
       );
     };
+
+    const handleGoToIvy = () => {
+      navigate('/products/ivy')
+    }
 
   return (
     <>
@@ -45,8 +53,8 @@ const DisplayProduct = () => {
 
           <div className="text-black flex items-center justify-between">
             <div>
-              <button className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</button>
-              <button className="text-xs underline pl-10 underline-offset-2">Learn More</button>
+              <Link to="products/ace" className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
+              <Link to="products/ace" className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
             </div>
 
             <div className="flex gap-6">
@@ -74,8 +82,8 @@ const DisplayProduct = () => {
 
           <div className="text-black flex items-center justify-between">
             <div>
-              <button className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</button>
-              <button className="text-xs underline pl-10 underline-offset-2">Learn More</button>
+              <Link to="products/ivy" onClick={handleGoToIvy} className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
+              <Link to="products/ivy" onClick={handleGoToIvy} className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
             </div>
 
             <div className="flex gap-6">

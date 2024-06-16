@@ -85,7 +85,7 @@ CREATE TABLE "Order" (
     "net_amount" DOUBLE PRECISION NOT NULL,
     "address_id" INTEGER NOT NULL,
     "payment_id" INTEGER,
-    "status" TEXT NOT NULL DEFAULT 'Un-paid',
+    "status" TEXT NOT NULL DEFAULT 'entry',
     "created_date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated_at" TIMESTAMP(3) NOT NULL,
 

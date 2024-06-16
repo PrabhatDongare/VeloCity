@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import { useForm } from "react-hook-form"
 
 import { IoIosArrowRoundDown } from "react-icons/io";
@@ -7,7 +7,7 @@ import Header from '../../Components/Header';
 
 
 const Employees = () => {
-  const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm()
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm()
 
   const onSubmit = async (data) => {
     try {

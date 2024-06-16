@@ -1,31 +1,39 @@
-import React, { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useForm } from "react-hook-form"
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
+import { fetchUserSignIn } from '../../redux/user/userSlice'
 import Header from '../../Components/Header';
 
 const Signup = () => {
-  const [rememberMe, setRememberMe] = useState(false)
+  const [addToNewsletter, setAddToNewsletter] = useState(false);
+  const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm()
 
-  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm()
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const onSubmit = async (data) => {
-    console.log(data)
+    const { first_name, last_name, email, password } = data
+    await dispatch(fetchUserSignIn({ first_name, last_name, email, password }))
     reset()
+
+    let token = await localStorage.getItem('token')
+      if (token) {
+        navigate('/account')
+        toast.success('Sign Up Success')
+      }
   }
 
-  const handleBtn = () => {
-    console.log("Forgot Password clicked")
+  const handleAddToNewsletter = () => {
+    setAddToNewsletter(!addToNewsletter)
   }
 
-  const handleForgetPassword = () => {
-    navigate("/account/forgot-password")
-  }
-
-  const handleRememberMe = () => {
-    // setRememberMe(!rememberMe)
-  }
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <>
@@ -39,7 +47,7 @@ const Signup = () => {
 
           {/* First Name */}
           <div >
-            <input {...register("firstName", {
+            <input {...register("first_name", {
               required: { value: true, message: "Please Enter First Name" },
               minLength: { value: 3, message: "min 3 character required" },
               maxLength: { value: 20, message: "max 20 character allowed" },
@@ -53,7 +61,7 @@ const Signup = () => {
 
           {/* Last Name */}
           <div >
-            <input {...register("lastName", {
+            <input {...register("last_name", {
               required: { value: true, message: "Please Enter Last Name" },
               minLength: { value: 3, message: "min 3 character required" },
               maxLength: { value: 20, message: "max 20 character allowed" },
@@ -86,19 +94,33 @@ const Signup = () => {
           </div>
 
           {/* Confirm Password */}
-          <input type="password"  {...register("password", {
-            required: { value: true, message: "This field is required" }
-          })} className='border w-full p-4 placeholder-black' placeholder='Your password' />
+          <div>
+            <input type="password"  {...register("confirmPassword", {
+              required: { value: true, message: "This field is required" },
+              validate: (val) => {
+                if (watch('password') != val) {
+                  return "Your passwords do no match";
+                }
+              },
+            })} className='border w-full p-4 placeholder-black' placeholder='Your password' />
+            {errors.confirmPassword && <div className=' text-sm flex items-end text-red-500'>{errors.confirmPassword.message}</div>}
+          </div>
 
           <div className='flex justify-between font-montserrat-light text-xs'>
-            <div className='flex items-center gap-2'>
-              <div className='w-2 h-2 border border-gray-400 rounded-full'></div>
-              <input type="button" value='SUBSCRIBE TO THE NEWSLETTER' onClick={handleRememberMe} className='cursor-pointer font-montserrat-regular' />
-            </div>
+            {addToNewsletter == false ?
+              <div className='flex items-center gap-2'>
+                <div className='w-2 h-2 border border-gray-400 rounded-full'></div>
+                <input type="button" value='SUBSCRIBE TO THE NEWSLETTER' onClick={handleAddToNewsletter} className='cursor-pointer font-montserrat-regular text-gray-500' />
+              </div>
+              :
+              <div className='flex items-center gap-2'>
+                <div className='w-1 h-1 border border-black rounded-full ml-0.5 mr-0.5 '></div>
+                <input type="button" value='SUBSCRIBE TO THE NEWSLETTER' onClick={handleAddToNewsletter} className='cursor-pointer font-montserrat-regular' />
+              </div>}
           </div>
 
           <input disabled={isSubmitting} type="submit" value='Create' className='w-full border rounded-full py-3 hover:bg-black hover:text-white cursor-pointer ' />
-          <input type="button" value='I already have an account' onClick={handleBtn} className='w-full border rounded-full py-3 hover:bg-black hover:text-white cursor-pointer ' />
+          <Link to='/account/login' className='text-center w-full border rounded-full py-3 hover:bg-black hover:text-white cursor-pointer ' >I already have an account</Link>
           <p className='text-xs font-montserrat-light text-center'>BY SIGNING UP YOU AGREE TO OUR <span className='font-montserrat-regular underline cursor-pointer '>PRIVACY POLICY</span></p>
         </form>
       </section>

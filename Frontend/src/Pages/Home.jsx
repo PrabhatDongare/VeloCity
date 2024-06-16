@@ -32,8 +32,8 @@ const Home = () => {
         </div>
 
         <div className="px-12 absolute right-0 bottom-14 text-black">
-          <button className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</button>
-          <button className="text-xs underline pl-10 underline-offset-2">Learn More</button>
+          <Link to="/products/ace" className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
+          <Link to="/electric-bike" className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
         </div>
         <a href='#scrollToProducts'
           className='absolute bg-black bottom-8 left-[600px] pt-2 px-1 rounded-full hover:bg-white hover:text-black cursor-pointer transition-all duration-300 ease-in-out' >
@@ -65,11 +65,13 @@ const Home = () => {
 
       {/* Store Locations */}
       <section className="relative h-[125vh] text-white font-montserrat-medium" >
-        < img src="/Common/Store_map.webp" alt="map" className="absolute -z-50 bg-[#ebedee]" loading='lazy' />
+        <img src="/Common/Store_map.webp" alt="map" className="absolute -z-50 bg-[#ebedee]" loading='lazy' />
         <div className="px-36 pt-48 w-6/12">
           <p className="text-6xl mb-8 " >Discover your local VeloCity partner store</p>
           <p className="w-5/6" >Our partner stores across the Netherlands are there for you. Whether you&rsquo;re looking to pick up a newly ordered bike, need a fix, or want to test ride our Ivy or Ace Two, your ideal biking experience is closer than you think.</p>
-          <button className="my-8 text-sm bg-white text-black rounded-full py-4 px-8 hover:text-white hover:bg-black">Find a partner store near you</button>
+          <div className='my-8'>
+            <Link to="/store" className="text-sm bg-white text-black rounded-full py-4 px-8 hover:text-white hover:bg-black" >Find a partner store near you</Link>
+          </div>
         </div>
       </section >
 
@@ -106,7 +108,7 @@ const Home = () => {
         <p className="flex items-center gap-2 py-14 w-2/6">
           <SlSocialInstagram />
           <span>Follow us on Instagram</span>
-          <Link to="https://instagram.com/" className="underline underline-offset-2">@VeloCity</Link>
+          <Link to="https://instagram.com/" target='_blank' className="underline underline-offset-2">@VeloCity</Link>
         </p>
 
         <div className="flex justify-between gap-3 h-[80vh] text-white font-montserrat-medium select-none">

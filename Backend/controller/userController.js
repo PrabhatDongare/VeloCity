@@ -235,7 +235,7 @@ exports.addAddress = async function (req, res) {
             where: { user_id: parseInt(user_id) }
         })
         if (checkAddress) {
-            return res.status(400).json({ success: false, message: 'Address already present, you can update it' });
+            return res.status(400).json({ success: false, message: `Address already present, you can't update it` });
         }
 
         // Adding new address

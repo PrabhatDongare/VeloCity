@@ -21,6 +21,9 @@ import ErrorPage from './Pages/ErrorPage.jsx'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import { store } from './redux/store.js'
+import { Provider } from 'react-redux'
+
 import './index.css'
 import {
   createBrowserRouter,
@@ -98,19 +101,9 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-    <ToastContainer
-      position="bottom-right"
-      autoClose={2000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss={false}
-      draggable
-      pauseOnHover
-      theme="light"
-      transition:Bounce
-    />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+      <ToastContainer position="bottom-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss={false} draggable pauseOnHover theme="light" transition:Bounce />
+    </Provider>
   </React.StrictMode>,
 )

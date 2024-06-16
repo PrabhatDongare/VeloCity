@@ -92,8 +92,8 @@ model Order {
   net_amount       Float
   address          Address     @relation(fields: [address_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   address_id       Int
-  payment_id       Int?
-  status           String      @default("Un-paid")
+  payment_id       String?
+  status           String      @default("entry")
   created_date     DateTime    @default(now())
   updated_at       DateTime    @updatedAt
   orderItems       OrderItem[]

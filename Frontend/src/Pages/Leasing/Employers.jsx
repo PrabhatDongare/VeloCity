@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Link } from 'react-router-dom';
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 
 import { IoIosArrowRoundDown } from "react-icons/io";
 
@@ -11,7 +11,8 @@ const Employers = () => {
   const [questionNo, setQuestionNo] = useState(0)
   const [requestForm, setRequestForm] = useState(true)
 
-  const { register, handleSubmit, watch, reset, formState: { errors, isSubmitting } } = useForm()
+  const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm()
+  const scrollToGetInTouch = useRef(null);
 
   const handleQ1 = () => {
     if (questionNo != 1) {
@@ -58,6 +59,11 @@ const Employers = () => {
       console.log(data)
       setRequestForm(false)
       reset()
+      
+      if (scrollToGetInTouch.current) {
+        scrollToGetInTouch.current.scrollIntoView();
+    }
+
     } catch (error) {
       console.error('Error occurred:', error);
     }
@@ -89,7 +95,7 @@ const Employers = () => {
         <div className='w-1/2 pl-28 pr-10 my-auto'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Lease bikes</h1>
           <p className='py-7'>Want to offer your employees the great perk of stylish and sustainable mobility? In the Netherlands, this is super easy with a bike plan. It’s cost-free for employers and outside of the work-related costs scheme (WKR).</p>
-          <Link to="/" className='underline font-montserrat-medium ' >Discover More</Link>
+          <Link to="/bike-leasing" className='underline font-montserrat-medium ' >Discover More</Link>
         </div>
       </section>
 
@@ -98,7 +104,7 @@ const Employers = () => {
         <div className='w-1/2 pl-28 pr-10 my-auto'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Lease bikes</h1>
           <p className='py-7'>Want to offer your employees the great perk of stylish and sustainable mobility? In the Netherlands, this is super easy with a bike plan. It’s cost-free for employers and outside of the work-related costs scheme (WKR).</p>
-          <Link to="/" className='underline font-montserrat-medium ' >Discover More</Link>
+          <Link to="/bike-leasing" className='underline font-montserrat-medium ' >Discover More</Link>
         </div>
         <img src="/Common/Homepage_desktop_mobile_2.webp" alt="Ivy Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
       </section>
@@ -106,7 +112,7 @@ const Employers = () => {
       {/* Content 3 */}
       <section className='mx-14 mt-24 mb-36 flex gap-20 '>
         <img src="/images/Home/carlanicieza.webp" alt="Ivy Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
-        <div className='w-1/2 pl-28 pr-10 my-auto font-montserrat-regular text-[#a1a2a1]'>
+        <div className='w-1/2 pl-28 pr-10 my-auto font-montserrat-regular text-[#717171]'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>How it works</h1>
 
           <p className='pt-8 text-xl'><span className='text-black bg-[#d0d1d0] rounded-full px-2.5 py-1 mr-2'>1.</span>Register your company</p>
@@ -119,12 +125,12 @@ const Employers = () => {
           <p className='text-sm ml-10'>Let&rsquo;s go! Your employees can choose their bikes and they&rsquo;ll be delivered stright to their homes</p>
 
           <p className='pt-5 text-xl'><span className='text-black bg-[#d0d1d0] rounded-full px-2.5 py-1.5 mr-2'>4.</span>Administration</p>
-          <p className='text-sm ml-10'>Everything in one place. The digital platform gives you an easy overflow of all the information for your payroll</p>
+          <p ref={scrollToGetInTouch} className='text-sm ml-10'>Everything in one place. The digital platform gives you an easy overflow of all the information for your payroll</p>
         </div>
       </section>
 
       {/* Form */}
-      <section className='mb-14 mx-auto w-4/6' >
+      <section className='mb-14 mx-auto w-4/6'  >
         <h1 id='leasing' className='text-5xl font-montserrat-medium text-center'>Get in touch</h1>
         {requestForm ? <form onSubmit={handleSubmit(onSubmit)} className='pt-16 flex flex-col gap-10 font-montserrat-light text-sm'>
           {/* First Name */}

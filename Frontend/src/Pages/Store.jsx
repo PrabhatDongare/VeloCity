@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import { IoIosArrowRoundDown } from "react-icons/io";
 import { GiAutoRepair } from "react-icons/gi";
@@ -71,6 +71,10 @@ const Store = () => {
     }
   }
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
   return (
     <>
       <Header />
@@ -111,11 +115,11 @@ const Store = () => {
         <h1 id='stores' className='text-8xl py-20 font-montserrat-medium text-center' >Our Stores</h1>
         <div className='flex flex-wrap gap-10 justify-center'>
 
-        <div >
+          <div >
             <img className='h-80 w-[440px] object-cover' src="/Common/Rozengracht Store.webp" alt="Van Woustraat Store" loading='lazy' />
             <div className='flex items-start gap-3 w-[440px] pt-3' >
               <CiLocationOn className='text-3xl text-red-500 ' />
-              <p>Rozengracht 101/103, 1016 LV Amsterdam, Netherlands</p>
+              <a href="https://maps.app.goo.gl/3dapynonV1GeT5aA9" target='_blank' className='hover:underline' >Rozengracht 101/103, 1016 LV Amsterdam, Netherlands</a>
             </div>
           </div>
 
@@ -123,15 +127,15 @@ const Store = () => {
             <img className='h-80 object-cover w-[440px]' src="/Common/Van Woustraat Store.jpg" alt="Van Woustraat Store" loading='lazy' />
             <div className='flex items-start gap-3 w-[440px] pt-3' >
               <CiLocationOn className='text-3xl text-red-500 ' />
-              <p>Van Woustraat 72h, 1073 LN, Amsterdam, Netherlands</p>
+              <a href="https://maps.app.goo.gl/vuY75jg7Fm7LxNq49" target='_blank' className='hover:underline' >Van Woustraat 72h, 1073 LN, Amsterdam, Netherlands</a>
             </div>
           </div>
 
-        <div >
+          <div >
             <img className='h-80 w-[440px] object-cover' src="/Common/Europalaan Store.webp" alt="Van Woustraat Store" loading='lazy' />
             <div className='flex items-start gap-3 pt-3' >
               <CiLocationOn className='text-3xl text-red-500 ' />
-              <p>Europalaan 931, 1363 BM Almere, Netherlands</p>
+              <a href="https://maps.app.goo.gl/3PorjoYxZyfemuPm8" target='_blank' className='hover:underline' >Europalaan 931, 1363 BM Almere, Netherlands</a>
             </div>
           </div>
 

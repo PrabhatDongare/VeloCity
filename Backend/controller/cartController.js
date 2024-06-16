@@ -9,8 +9,8 @@ exports.get = async function (req, res) {
             where: { user_id: parseInt(user_id) },
             select: {id: true, item_type: true, url_slug: true, quantity: true, price: true, total_amount: true }
         });
-        if (cart.count === 0) {
-            return res.status(404).json({ success: false, cart, message: 'Cart is Empty' });
+        if (cart.length === 0) {
+            return res.status(404).json({ success: false, message: 'Cart is Empty' });
         }
         res.status(200).json({ success: true, cart });
     } catch (error) {
@@ -24,7 +24,7 @@ exports.add = async function (req, res) {
     try {
         const user_id = req.user.id;
         const { item_type, url_slug, quantity } = req.params;
-        
+                
         // Select table (productDetails or accessory)
         let table;
         if (item_type === "Product"){
@@ -38,7 +38,7 @@ exports.add = async function (req, res) {
         }
 
         // Find that item
-        const searchItem = await prisma.table.findFirst({
+        const searchItem = await prisma[table].findFirst({
             where: { url_slug }
         })
         if (!searchItem){
@@ -76,8 +76,8 @@ exports.remove = async function (req, res) {
             return res.status(404).json({ success: false, message: 'Cart is empty' });
         }
         
-        // res.status(200).json({ success: true, message: 'Item removed from cart' });
-        res.status(200).json({ success: true, removedItem: deletedCartItem, message: 'Item removed from cart' });
+        res.status(200).json({ success: true, message: 'Item removed from cart' });
+        // res.status(200).json({ success: true, removedItem: deletedCartItem, message: 'Item removed from cart' });
         
     } catch (error) {
         console.error(error);
@@ -85,7 +85,7 @@ exports.remove = async function (req, res) {
     }
 };
 
-// UPDATE CART ITEMS
+// UPDATE CART ITEMS (Added item quantity manipulation)
 exports.update = async function (req, res) {
     try {
         const user_id = req.user.id;

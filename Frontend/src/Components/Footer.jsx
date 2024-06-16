@@ -20,12 +20,12 @@ const Footer = () => {
 
     const warningCB = () => (
         <div className='text-xs pt-8 text-center animate-slideDown'>
-          PLEASE AGREE TO THE PRIVACY POLICY BEFORE SUBSCRIBING
+            PLEASE AGREE TO THE PRIVACY POLICY BEFORE SUBSCRIBING
         </div>
-      );
+    );
 
     const onSubmit = async (data) => {
-        if(checked){
+        if (checked) {
             console.log("News Letter Email : ", data.email)
             reset();
         }
@@ -35,7 +35,7 @@ const Footer = () => {
         <footer>
             <div className='bg-[#494949] flex items-center justify-between py-10 px-56'>
                 <span className=' text-white w-4/6 font-light'>Ready to take the Electric Ivy or Ace for a spin? Our 35 partner stores across the Netherlands are there for you. Whether you&apos;re looking to pick up a newly ordered bike, need a fix, or want to test ride our Ivy or Ace Two, your ideal biking experience is closer than you think.</span>
-                <button className='bg-white rounded-full py-3 px-16 '>BOOK NOW</button>
+                <Link to="/store" className='bg-white rounded-full py-3 px-16 '>BOOK NOW</Link>
             </div>
             <div className="bg-zinc-900 text-white flex justify-between px-12 pt-14 relative">
                 <a href='#scrollToTop'
@@ -88,19 +88,19 @@ const Footer = () => {
                             <button disabled={isSubmitting} className="bg-white rounded-full text-black py-3 px-10">Subscribe</button>
                         </div>
 
-                        {errors.email && <div className='text-xs pt-8 text-center animate-slideDown'>{errors.email.message}</div> || ( email && !checked && warningCB())}
+                        {errors.email && <div className='text-xs pt-8 text-center animate-slideDown'>{errors.email.message}</div> || (email && !checked && warningCB())}
                         <div className='flex gap-1 py-8'>
-                            <button  className='text-xl' onClick={handleChecked} >{checked ? <MdOutlineCheckBox /> : <MdCheckBoxOutlineBlank />}</button>
+                            <button className='text-xl' onClick={handleChecked} >{checked ? <MdOutlineCheckBox /> : <MdCheckBoxOutlineBlank />}</button>
                             <span >By signing up, I agree to the <span className="underline">privacy policy</span> of VeloCity.</span>
                         </div>
                     </form>
 
                     <ul className="flex gap-5 justify-end items-center">
-                        <li> <Link to="https://www.facebook.com/"> <FaFacebook className="text-lg" /> </Link> </li>
-                        <li> <Link to="https://www.instagram.com/"> <PiInstagramLogoFill className="text-xl" /> </Link> </li>
-                        <li> <Link to="https://www.youtube.com/"> <FaYoutube className="text-xl" /> </Link> </li>
-                        <li> <Link to="https://www.linkedin.com/"> <IoLogoLinkedin className="text-xl" /> </Link> </li>
-                        <li> <Link to="https://www.tiktok.com/"> <FaTiktok /> </Link> </li>
+                        <li> <Link to="https://www.facebook.com/" target="_blank" > <FaFacebook className="text-lg" /> </Link> </li>
+                        <li> <Link to="https://www.instagram.com/" target="_blank" > <PiInstagramLogoFill className="text-xl" /> </Link> </li>
+                        <li> <Link to="https://www.youtube.com/" target="_blank" > <FaYoutube className="text-xl" /> </Link> </li>
+                        <li> <Link to="https://www.linkedin.com/" target="_blank" > <IoLogoLinkedin className="text-xl" /> </Link> </li>
+                        <li> <Link to="https://www.tiktok.com/" target="_blank" > <FaTiktok /> </Link> </li>
                     </ul>
                 </div>
             </div>

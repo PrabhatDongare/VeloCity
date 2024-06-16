@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require('uuid');
 exports.checkout = async function (req, res) {
     try {
         const user_id = req.user.id;
-        const order_id = uuidv4();
+        const order_no = uuidv4();
 
         // Take all cart items
         const cartItems = await prisma.cart.findMany({
@@ -16,6 +16,20 @@ exports.checkout = async function (req, res) {
             return res.status(404).json({ success: false, message: 'Cart was empty' });
         }
 
+        // Entry made for order
+        const searchAddress = await prisma.address.findFirst({
+            where: { user_id }
+        })
+
+        if (!searchAddress) {
+            return res.status(404).json({ success: false, message: 'Add address first' });
+        }
+
+        let order = await prisma.order.create({
+            data: { order_no, user_id, total_amount: 0, shipping_charges: 0, net_amount: 0, address_id: searchAddress.id }
+        })
+
+        // Adding to order item table
         let total_amount = 0;
         for (const item of cartItems) {
             let table;
@@ -37,26 +51,19 @@ exports.checkout = async function (req, res) {
 
             total_amount += parseInt(item.price) * parseInt(item.quantity)
 
-            // add to order item
             await prisma.orderItem.create({
-                data: { order_id, item_type: item.item_type, url_slug: item.url_slug, quantity: parseInt(item.quantity), price: parseInt(item.price) }
+                data: { order_id: parseInt(order.id), item_type: item.item_type, url_slug: item.url_slug, quantity: parseInt(item.quantity), price: parseInt(item.price) }
             })
         };
 
         // add to order table
         const shipping_charges = Math.floor(Math.random() * 91) + 10;
+        console.log(shipping_charges)
         const net_amount = total_amount + shipping_charges
 
-        const searchAddress = await prisma.address.findFirst({
-            where: { user_id }
-        })
-
-        if (!searchAddress) {
-            return res.status(404).json({ success: false, message: 'Add address first' });
-        }
-
-        const order = await prisma.order.create({
-            data: { order_no, user_id, total_amount, shipping_charges, net_amount, address_id: searchAddress.id }
+        await prisma.order.update({
+            where: { id: order.id },
+            data: { total_amount, shipping_charges, net_amount, status: "unpaid" }
         })
 
         // Clear the user's cart
@@ -84,7 +91,7 @@ exports.get = async function (req, res) {
             where: { user_id }
         })
         if (!order) {
-            return res.status(404).json({ success: false, message: 'No such order exists' });
+            return res.status(404).json({ success: false, message: 'No order exists' });
         }
 
         // Find order items
@@ -107,7 +114,7 @@ exports.update = async function (req, res) {
 
         // Check for Un-paid order
         const customerOrder = await prisma.order.findFirst({
-            where: { user_id, status: "Un-paid" }
+            where: { user_id, status: "unpaid" }
         });
 
         if (!customerOrder) {
@@ -172,7 +179,8 @@ exports.update = async function (req, res) {
             data: { total_amount: new_total_amount, net_amount: new_net_amount }
         });
 
-        res.status(200).json({ success: true, updatedOrder, updatedOrderItem, message: 'Order updated' });
+        // res.status(200).json({ success: true, updatedOrder, updatedOrderItem, message: 'Order updated' });
+        res.status(200).json({ success: true, message: 'Order updated' });
 
     } catch (error) {
         console.error(error);
@@ -194,18 +202,30 @@ exports.paid = async function (req, res) {
             return res.status(404).json({ success: false, message: 'No such order exists' });
         }
 
-        // Update the order to mark it as paid
-        const updatedOrder = await prisma.order.update({
-            where: { id: order_id },
-            data: { payment_id, status: "Paid" }
-        });
-
         // Get the order items for the order
         const orderItems = await prisma.orderItem.findMany({
             where: { order_id }
         })
         if (orderItems.length < 1) {
             return res.status(404).json({ success: false, message: 'No such order exists' });
+        }
+
+        // Check finally stock in inventory before payment
+        for (const item of orderItems) {
+            let table;
+            if (item.item_type === "Product") {
+                table = "productDetail"
+            }
+            else {
+                table = "accessory"
+            }
+
+            const inventoryItem = await prisma[table].findFirst({
+                where: { url_slug: item.url_slug },
+            })
+            if (inventoryItem.quantity < item.quantity) {
+                return res.status(404).json({ success: false, message: 'Stock out, try when stock is available' });
+            }
         }
 
         // Update the inventory for each order item
@@ -217,13 +237,20 @@ exports.paid = async function (req, res) {
             else {
                 table = "accessory"
             }
-            // Update the inventory
+
             await prisma[table].update({
                 where: { url_slug: item.url_slug },
                 data: { quantity: { decrement: item.quantity } }
             })
         }
-        res.status(200).json({ success: true, order, message: 'Order found successfully' });
+
+        // Update the order to mark it as paid
+        const updatedOrder = await prisma.order.update({
+            where: { id: parseInt(order_id) },
+            data: { payment_id, status: "paid" }
+        });
+
+        res.status(200).json({ success: true, order, message: 'Order filled successfully' });
 
     } catch (error) {
         console.error(error);
@@ -232,10 +259,7 @@ exports.paid = async function (req, res) {
 }
 
 // DELETE ORDER
-const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
-
-exports.deleteItem = async function (req, res) {
+exports.remove = async function (req, res) {
     try {
         const { order_id } = req.body;
 
@@ -245,6 +269,9 @@ exports.deleteItem = async function (req, res) {
         });
         if (!order) {
             return res.status(404).json({ success: false, message: 'No such order exists' });
+        }
+        if (order.status === "paid") {
+            return res.status(404).json({ success: false, message: `Can't delete paid order` });
         }
 
         // Delete order items
@@ -263,3 +290,4 @@ exports.deleteItem = async function (req, res) {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 }
+

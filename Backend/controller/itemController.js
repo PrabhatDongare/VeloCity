@@ -47,9 +47,9 @@ exports.updateProduct = async (req, res) => {
 // ADD PRODUCT DETAILS
 exports.addProductDetail = async function (req, res) {
     try {
-        const { product_id, color, price, quantity, status } = req.body;
+        const { product_id, url_slug, color, price, quantity, status } = req.body;
         const productDetail = await prisma.productDetail.create({
-            data: { product_id, color, price, quantity, status }
+            data: { product_id, url_slug, color, price, quantity, status }
         });
         res.status(200).json({ success: true, productDetail });
 
@@ -67,6 +67,7 @@ exports.deleteProductDetail = async (req, res) => {
         where: { id: parseInt(id) }
       });
       res.status(200).json({ success: true, message: 'Product Detail deleted' });
+
     } catch (error) {
       console.error(error);
       res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -76,12 +77,13 @@ exports.deleteProductDetail = async (req, res) => {
 // UPDATE PRODUCT DETAILS
 exports.updateProductDetail = async (req, res) => {
     try {
-        const { id, color, price, quantity, status } = req.body;
+        const { id, product_id, url_slug, color, price, quantity, status } = req.body;
         const productDetail = await prisma.productDetail.update({
             where: { id: parseInt(id) },
-            data: { color, price, quantity, status }
+            data: { product_id, url_slug, color, price, quantity, status }
         });
         res.status(200).json({ success: true, productDetail });
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
@@ -92,9 +94,9 @@ exports.updateProductDetail = async (req, res) => {
 // ADD ACCESSORY
 exports.addAccessory = async function (req, res) {
     try {
-        const { section, accessory_name, price, quantity, description, url_slug, status } = req.body;
+        const { section, accessory_name, url_slug, price, quantity, description, status } = req.body;
         const accessory = await prisma.accessory.create({
-            data: { section, accessory_name, price, quantity, description, url_slug, status }
+            data: { section, accessory_name, url_slug, price, quantity, description, status }
         });
         res.status(200).json({ success: true, accessory });
 
@@ -121,10 +123,10 @@ exports.deleteAccessory = async (req, res) => {
 // UPDATE ACCESSORY
 exports.updateAccessory = async (req, res) => {
     try {
-        const { id, section, accessory_name, price, quantity, description, url_slug, status } = req.body;
+        const { id, section, accessory_name, url_slug, price, quantity, description, status } = req.body;
         const accessory = await prisma.accessory.update({
             where: { id: parseInt(id) },
-            data: { section, accessory_name, price, quantity, description, url_slug, status }
+            data: { section, accessory_name, url_slug, price, quantity, description, status }
         });
         res.status(200).json({ success: true, accessory });
     } catch (error) {
@@ -135,30 +137,30 @@ exports.updateAccessory = async (req, res) => {
 
 // --------------------------------------------------------
 // LINK PRODUCT to ACCESSORY
-exports.linkProductAccessory = async (req, res) => {
-    try {
-        const { productId, accessoryId } = req.body;
-        const productAccessory = await prisma.productAccessory.create({
-            data: { productId, accessoryId }
-        });
-        res.status(200).json({ success: true, productAccessory });
+// exports.linkProductAccessory = async (req, res) => {
+//     try {
+//         const { productId, accessoryId } = req.body;
+//         const productAccessory = await prisma.productAccessory.create({
+//             data: { productId, accessoryId }
+//         });
+//         res.status(200).json({ success: true, productAccessory });
 
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: 'Internal Server Error' });
+//     }
+// };
 
 // UNLINK PRODUCT to ACCESSORY
-exports.unlinkProductAccessory = async (req, res) => {
-    try {
-        const { productId, accessoryId } = req.body;
-        await prisma.productAccessory.deleteMany({
-            where: { productId: parseInt(productId), accessoryId: parseInt(accessoryId) }
-        });
-        res.status(200).json({ success: true, message: 'Product-Accessory link removed' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-};
+// exports.unlinkProductAccessory = async (req, res) => {
+//     try {
+//         const { productId, accessoryId } = req.body;
+//         await prisma.productAccessory.deleteMany({
+//             where: { productId: parseInt(productId), accessoryId: parseInt(accessoryId) }
+//         });
+//         res.status(200).json({ success: true, message: 'Product-Accessory link removed' });
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: 'Internal Server Error' });
+//     }
+// };
