@@ -10,10 +10,9 @@ const DisplayProduct = React.lazy(() => import('../Components/DisplayProduct'));
 const CarouselCategory = React.lazy(() => import('../Sections/Home/CarouselCategory'));
 const CarouselAwards = React.lazy(() => import('../Sections/Home/CarouselAwards'));
 const CarouselReviews = React.lazy(() => import('../Sections/Home/CarouselReviews'));
-
+import LoadingAnimation from '../Components/LoadingAnimation';
 
 const Home = () => {
-
   return (
     <>
       <Header />
@@ -42,14 +41,14 @@ const Home = () => {
       </section>
 
       {/* 2 Display Products */}
-      <Suspense fallback={<div className='text-center'>Loading...</div>}>
+      <Suspense fallback={<LoadingAnimation/>}>
         <DisplayProduct />
       </Suspense>
 
       {/* 3 Explore Cards */}
       <section className="py-14 relative">
         <span className="text-3xl absolute top-24 left-16">Explore our bikes</span>
-        <Suspense fallback={<div className='text-center'>Loading...</div>}>
+        <Suspense fallback={<LoadingAnimation/>}>
           <CarouselCategory />
         </Suspense>
       </section >
@@ -97,7 +96,7 @@ const Home = () => {
       {/* Awards */}
       <section className="relative h-[125vh] select-none text-white" >
         <img src="/images/Home/Ace_Two_Matte_Black_1.webp" alt="Bike Image" className="absolute -z-50 bg-[#ebedee]" loading='lazy' />
-        <Suspense fallback={<div className='text-center'>Loading...</div>}>
+        <Suspense fallback={<LoadingAnimation/>}>
           <CarouselAwards />
         </Suspense>
       </section >
@@ -153,7 +152,7 @@ const Home = () => {
       <section className="px-14 pb-24 pt-14">
         <p className="text-7xl w-2/6">Let customers</p>
         <p className="text-7xl pb-28 w-2/6">speak for us.</p>
-        <Suspense fallback={<div className='text-center'>Loading...</div>}>
+        <Suspense fallback={<LoadingAnimation/>}>
           <CarouselReviews />
         </Suspense>
       </section>

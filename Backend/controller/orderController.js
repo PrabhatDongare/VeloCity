@@ -13,7 +13,7 @@ exports.checkout = async function (req, res) {
             where: { user_id }
         })
         if (cartItems.length === 0) {
-            return res.status(404).json({ success: false, message: 'Cart was empty' });
+            return res.status(400).json({ success: false, message: 'Cart was empty' });
         }
 
         // Entry made for order
@@ -22,11 +22,12 @@ exports.checkout = async function (req, res) {
         })
 
         if (!searchAddress) {
-            return res.status(404).json({ success: false, message: 'Add address first' });
+            return res.status(400).json({ success: false, message: 'Add address to checkout' });
         }
 
         let order = await prisma.order.create({
-            data: { order_no, user_id, total_amount: 0, shipping_charges: 0, net_amount: 0, address_id: searchAddress.id }
+            // data: { order_no, user_id, total_amount: 0, shipping_charges: 0, net_amount: 0, address_id: searchAddress.id }
+            data: { order_no, user_id, total_amount: 0, shipping_charges: 0, net_amount: 0, address_id: "" }
         })
 
         // Adding to order item table
@@ -58,7 +59,7 @@ exports.checkout = async function (req, res) {
 
         // add to order table
         const shipping_charges = Math.floor(Math.random() * 91) + 10;
-        console.log(shipping_charges)
+        // console.log(shipping_charges)
         const net_amount = total_amount + shipping_charges
 
         await prisma.order.update({
@@ -71,9 +72,9 @@ exports.checkout = async function (req, res) {
             where: { user_id }
         });
 
-        // orderItem = prisma.orderItem
-        // res.status(200).json({ success: true, order, orderItem, message: 'Checkout successful' });
-        res.status(200).json({ success: true, order, message: 'Checkout successful' });
+        orderItem = prisma.orderItem
+        res.status(200).json({ success: true, order, orderItem, message: 'Checkout successful' });
+        // res.status(200).json({ success: true, order, message: 'Checkout successful' });
 
     } catch (error) {
         console.error(error);
@@ -85,20 +86,24 @@ exports.checkout = async function (req, res) {
 exports.get = async function (req, res) {
     try {
         const user_id = req.user.id;
+        const currentDate = new Date();
+        const sevenDaysAgo = new Date(currentDate.setDate(currentDate.getDate() - 7));
 
         // Find order
-        const order = await prisma.order.findFirst({
-            where: { user_id }
-        })
-        if (!order) {
+        const order = await prisma.order.findMany({
+            where: { user_id: user_id, OR: [{ updated_at: { gte: sevenDaysAgo } }, { status: 'unpaid' }] },
+            orderBy: { updated_at: 'desc'}
+        });
+        if (order.length < 1) {
             return res.status(404).json({ success: false, message: 'No order exists' });
         }
 
         // Find order items
-        const orderItems = await prisma.orderItem.findMany({
-            where: { order_id: order.id }
-        })
-        res.status(200).json({ success: true, order, orderItems, message: 'Order found successfully' });
+        // const orderItems = await prisma.orderItem.findMany({
+        //     where: { order_id: order.id }
+        // })
+        // res.status(200).json({ success: true, order, orderItems, message: 'Order found successfully' });
+        res.status(200).json({ success: true, order, message: 'Order found successfully' });
 
     } catch (error) {
         console.error(error);

@@ -45,7 +45,7 @@ exports.add = async function (req, res) {
             return res.status(404).json({ success: false, message: `Item doesn't exists` });
         }
         if (searchItem.quantity < 1){
-            return res.status(404).json({ success: false, message: 'Few item out of stock' });  // which item out o stock show them
+            return res.status(404).json({ success: false, message: 'Out of stock' });  // which item out of stock show them
         }
         let total_amount = parseInt(searchItem.price) * parseInt(quantity)
 
@@ -68,8 +68,12 @@ exports.remove = async function (req, res) {
         const user_id = req.user.id
         const { url_slug } = req.body;
         
-        const deletedCartItem = await prisma.cart.delete({
+        const itemFindToDelete = await prisma.cart.findFirst({
             where: { user_id, url_slug }
+        });
+
+        const deletedCartItem = await prisma.cart.delete({
+            where: { id: itemFindToDelete.id }
         });
         
         if (deletedCartItem.count === 0) {

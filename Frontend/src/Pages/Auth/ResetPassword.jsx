@@ -1,18 +1,26 @@
 // import React, from 'react'
 import { useForm } from "react-hook-form"
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import Header from '../../Components/Header';
+import { useDispatch } from 'react-redux';
+import { requestPasswordReset } from '../../redux/user/userSlice';
 
 const ResetPassword = () => {
 
     const { register, handleSubmit, reset, watch, formState: { errors, isSubmitting } } = useForm()
-    // const navigate = useNavigate()
+    
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const { token } = useParams()
 
     const onSubmit = async (data) => {
-        console.log(data)
+        const { password } = data
+        await dispatch(requestPasswordReset({ password, token }))
+        console.log("request sent to backend")
         reset()
-        // navigate("/account/login")
+        navigate("/account/login")
+        window.location.reload();
     }
 
     const password = watch("password")

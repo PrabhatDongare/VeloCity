@@ -43,7 +43,22 @@ exports.updateProduct = async (req, res) => {
     }
 };
 
-// --------------------------------------------------------
+// --------------------------------------------------------------------------------
+// GET PRODUCT DETAILS
+exports.getProductDetail = async (req, res) => {
+    try {
+        const { product_id } = req.body;
+        const productDetail = await prisma.productDetail.findMany({
+            where: { product_id: parseInt(product_id) }
+        });
+        res.status(200).json({ success: true, productDetail });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+};
+
 // ADD PRODUCT DETAILS
 exports.addProductDetail = async function (req, res) {
     try {
@@ -91,6 +106,18 @@ exports.updateProductDetail = async (req, res) => {
 };
 
 // --------------------------------------------------------
+// GET ACCESSORY
+exports.getAccessory = async (req, res) => {
+    try {
+        const accessory = await prisma.accessory.findMany();
+        res.status(200).json({ success: true, accessory });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+};
+
 // ADD ACCESSORY
 exports.addAccessory = async function (req, res) {
     try {

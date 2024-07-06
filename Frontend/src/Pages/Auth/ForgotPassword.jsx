@@ -3,14 +3,19 @@ import { useForm } from "react-hook-form"
 import { useNavigate } from 'react-router-dom';
 
 import Header from '../../Components/Header';
+import { useDispatch } from 'react-redux';
+import { requestPasswordForgot } from '../../redux/user/userSlice'
 
 const ForgotPassword = () => {
 
     const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm()
+
+    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     const onSubmit = async (data) => {
-        console.log(data)
+        const { email } = data
+        await dispatch(requestPasswordForgot({ email }))
         reset()
     }
 

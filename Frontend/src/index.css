@@ -76,4 +76,35 @@ html {
   .moved {
     transform: translateX(100px);
   }
-  
+
+
+.accountBtnStyling {
+    position: relative;
+}
+
+.accountBtnStyling::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    left: 0;
+    bottom: 0px;
+    height: 1px;
+    background-color: rgb(0, 0, 0);
+    transition: width 0.5s ease-in-out;
+}
+
+.accountBtnStyling:hover::after {
+    width: 0%;
+}
+
+table, th, td {
+    border-top: 1.5px solid #c4c4c4;
+    border-bottom: 1.5px solid #c4c4c4;
+    border-collapse: collapse;
+  }
+
+th, td {
+    /* padding-top: 8px; */
+    padding: 12px 8px;
+    text-align: center;
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
 import { IoIosArrowRoundDown } from "react-icons/io";
 import { GiAutoRepair } from "react-icons/gi";
@@ -71,10 +71,6 @@ const Store = () => {
     }
   }
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
   return (
     <>
       <Header />
@@ -110,7 +106,7 @@ const Store = () => {
         </div>
       </section>
 
-      {/* Store internal */}
+      {/* Store Locations */}
       <section className='mx-14 font-montserrat-regular' >
         <h1 id='stores' className='text-8xl py-20 font-montserrat-medium text-center' >Our Stores</h1>
         <div className='flex flex-wrap gap-10 justify-center'>

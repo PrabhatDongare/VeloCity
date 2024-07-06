@@ -1,13 +1,19 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import slugify from 'slugify';
+import { toast } from 'react-toastify';
+import { unwrapResult } from '@reduxjs/toolkit';
 
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 
 import { Ace_Two, Ivy_Two } from "../../Utils/product";
+import { fetchProductData, requestAddToCart } from '../../redux/item/itemSlice'
+import { frontendAddToCart } from '../../redux/cart/cartSlice'
 
 const responsive = {
     superLargeDesktop: {
@@ -24,7 +30,9 @@ const Intro = ({ scrollId }) => {
     const [showProduct, setShowProduct] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    const { product } = useSelector((state) => state.item)
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const handleNextImage = () => {
         setProductIndex((prevIndex) => (prevIndex + 1) % Ivy_Two[productColor].length);
@@ -48,6 +56,33 @@ const Intro = ({ scrollId }) => {
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };
+
+    const updateProductAtFrontend = async () => {
+        await dispatch(fetchProductData({ "product_id": 2 }))
+    }
+
+    useEffect(() => {
+        updateProductAtFrontend()
+    }, [])
+
+    const handleAddToCart = async() => {
+        if(localStorage.getItem("token")){
+            const base = "ivy " + productColor
+            const url_slug = slugify(base, {lower: true, strict: true, trim: true})
+            
+            const resultAction = await dispatch(requestAddToCart({ item_type:"Product", url_slug, quantity:1 }))
+            const result = unwrapResult(resultAction);
+            const { success, newCartItem, message } = result
+
+            if(success){
+                await frontendAddToCart({ newCartItem })
+            }
+            toast.success(message)
+        }
+        else{
+            navigate("/account/login");
+        }
+    }
 
     return (
         <>
@@ -85,7 +120,7 @@ const Intro = ({ scrollId }) => {
                             <div className='absolute top-0 left-40 text-xs pl-1'>Two</div>
                             {showProduct ? <SlArrowUp /> : <SlArrowDown />}
                         </button>
-                        <p className='text-3xl' >€ 3.299</p>
+                        {product.length > 0  ? <p className='text-3xl' >€ {product[0].price}</p> : <p className='text-3xl' >€ 329.9</p>}
                     </div>
 
                     {showProduct && <div className='mb-5 flex gap-8 font-montserrat-regular' >
@@ -132,7 +167,7 @@ const Intro = ({ scrollId }) => {
                     <p className='my-8 text-sm text-[#727373]' >The Ivy Two is a step-through frame electric bike combining design, advanced technology, and safety features. Rider height: between 164 and 184cm.</p>
 
                     <a href={`#${scrollId}`} className='w-56 flex justify-between items-center gap-1 py-2 px-5 bg-[#f0f0f0] rounded-full font-montserrat-light text-sm'> <span>Scroll to specifications</span> <SlArrowDown className='text-xs' /> </a>
-                    <button className='bg-black text-white w-full rounded-full py-4 text-xs font-montserrat-medium my-9 hover:bg-white hover:text-black border border-[#727373]' >Customize and add to cart</button>
+                    <button onClick={handleAddToCart} className='bg-black text-white w-full rounded-full py-4 text-xs font-montserrat-medium my-9 hover:bg-white hover:text-black border border-[#727373]' >Add to Cart</button>
                     <hr />
                     <p className='mt-4 mb-2' >Shipping to the Netherlands, Belgium & Germany only.</p>
                     <p className='font-light' >Delivery time: 5-15 business days</p>

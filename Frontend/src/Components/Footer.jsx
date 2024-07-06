@@ -28,6 +28,7 @@ const Footer = () => {
         if (checked) {
             console.log("News Letter Email : ", data.email)
             reset();
+            setChecked(false)
         }
     }
 
@@ -85,7 +86,8 @@ const Footer = () => {
                                 }
                             })} className='border-none text-sm bg-transparent placeholder-white py-4 w-96 text-center outline-none'
                                 placeholder="Enter your email address here" maxLength={60} autoComplete="off" />
-                            <button disabled={isSubmitting} className="bg-white rounded-full text-black py-3 px-10">Subscribe</button>
+                            {/* <button disabled={isSubmitting} className="bg-white rounded-full text-black py-3 px-10">Subscribe</button> */}
+                            <input disabled={isSubmitting} type="submit" className="bg-white rounded-full text-black py-3 px-10" placeholder='SUBSCRIBE' />
                         </div>
 
                         {errors.email && <div className='text-xs pt-8 text-center animate-slideDown'>{errors.email.message}</div> || (email && !checked && warningCB())}

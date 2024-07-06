@@ -1,17 +1,29 @@
-// import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { CiUser } from "react-icons/ci";
 import { HiShoppingBag } from "react-icons/hi";
 import { BsChevronDown, BsChevronUp } from "react-icons/bs";
+
+import { fetchUserCart } from '../redux/cart/cartSlice';
+import { requestCheckout } from '../redux/order/orderSlice';
+import { toast } from 'react-toastify';
+
 
 const Header = ({ bg }) => {
   const [isWhite, setIsWhite] = useState(false);
   const [listElectricBike, setListElectricBike] = useState(false)
   const [listCityBike, setListCityBike] = useState(false)
   const [listLeasing, setListLeasing] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const userCart = useSelector((state) => state.cart.userCart)
+  const loading = useSelector((state) => state.order.loading);
+  const { address } = useSelector((state) => state.user);
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleMouseEnter = () => {
     setIsWhite(true);
@@ -40,6 +52,44 @@ const Header = ({ bg }) => {
     setListCityBike(false)
     setListLeasing(!listLeasing)
   }
+
+  const handleAccount = () => {
+    if (localStorage.getItem("token")) {
+      navigate('/account')
+    }
+    else {
+      navigate('/account/login')
+    }
+  }
+
+  const fetchDataAsync = async () => {
+    if (localStorage.getItem("token")) {
+      await dispatch(fetchUserCart())
+    }
+  }
+
+  const handleOpenModal = () => {
+    if (localStorage.getItem("token")) {
+      fetchDataAsync();
+      setIsModalOpen(true);
+    }
+    else {
+      navigate('/account/login')
+    }
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  
+  const handleCheckout = async () => {
+    if(address.length < 1){
+      navigate('/account')
+      toast.warning("Please add address before Ordering")
+    }
+    else{
+      await dispatch(requestCheckout())
+    }
+  };
 
   return (
     <header id='scrollToTop' onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} className={`${bg ? "text-white" : ""} hover:bg-white hover:text-black transition-all duration-500 `}>
@@ -71,10 +121,35 @@ const Header = ({ bg }) => {
         </div>
 
         <ul className='flex'>
-          <li className="pr-14"><Link to="/account"><CiUser className="text-xl" /></Link></li>
-          <li className=""><Link to="/"><HiShoppingBag className="text-xl" /></Link></li>
+          <li className="pr-14"><button onClick={handleAccount} ><CiUser className="text-xl" /></button></li>
+          <li><button onClick={handleOpenModal} ><HiShoppingBag className="text-xl" /></button></li>
+
+          {isModalOpen &&
+            <div className="fixed inset-0 flex items-center justify-end bg-black bg-opacity-50 z-50 ">
+              <div className="relative bg-white  shadow-lg h-[100vh] w-[50vw] font-montserrat-regular">
+                <div className='flex justify-between px-16 py-7 '>
+                  <p className='text-4xl' >Cart</p>
+                  <button onClick={handleCloseModal} className="font-bold text-2xl ">✕</button>
+                </div>
+                <hr />
+                {userCart.length > 0 ?
+                  <div className='px-16 py-10' >
+                    <p>Multiple Items in cart</p>
+                    <p className='flex justify-end my-10' >
+                      <button onClick={handleCheckout} className=' border border-[#727373] rounded-full py-3 px-16 text-black hover:bg-black hover:text-white' >
+                        { loading ? <span className='animate-ping' >Checkout</span> : <span>Checkout</span>}
+                      </button>
+                    </p>
+                  </div> :
+                  <p className='text-xl px-16 py-10' >Your cart is empty.</p>
+                }
+              </div>
+            </div>
+          }
+
         </ul>
       </div>
+      {/* {error && <p>Error: {error}</p>} */}
 
       {listElectricBike && isWhite && <ul className={`absolute left-[202px] bg-white font-montserrat text-sm rounded-b-md animate-slideDown z-10`}>
         <li className='border-b-[0.5px] border-r-[0.5px] border-l-[0.5px] border-[#e7e7e7] py-1.5 hover:bg-[#ebedee] ' onClick={() => setListElectricBike(false)} ><Link to="/electric-bike" className='py-3 pr-10 pl-4' >Overview</Link></li>

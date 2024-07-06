@@ -8,8 +8,8 @@ const fetchuser = require('../middleware/fetchuser')
 
 router.post("/signup", createValidator, userSignUp);                              
 router.post("/login", loginValidator, userLogin);
-router.post("/forgotPassword", emailValidator, forgotPassword); 
-router.post("/resetPassword/:id/:token", passwordValidator, resetPassword); 
+router.post("/forgot-password", emailValidator, forgotPassword); 
+router.post("/reset-password", passwordValidator, resetPassword); 
 
 router.post("/adminSignUp", createValidator, adminSignUp);
 

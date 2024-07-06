@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useForm } from "react-hook-form"
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
@@ -30,10 +30,6 @@ const Signup = () => {
   const handleAddToNewsletter = () => {
     setAddToNewsletter(!addToNewsletter)
   }
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
   return (
     <>
@@ -121,7 +117,7 @@ const Signup = () => {
 
           <input disabled={isSubmitting} type="submit" value='Create' className='w-full border rounded-full py-3 hover:bg-black hover:text-white cursor-pointer ' />
           <Link to='/account/login' className='text-center w-full border rounded-full py-3 hover:bg-black hover:text-white cursor-pointer ' >I already have an account</Link>
-          <p className='text-xs font-montserrat-light text-center'>BY SIGNING UP YOU AGREE TO OUR <span className='font-montserrat-regular underline cursor-pointer '>PRIVACY POLICY</span></p>
+          <p className='text-xs font-montserrat-light text-center'>BY SIGNING UP YOU AGREE TO OUR <span className='font-montserrat-regular underline select-none'>PRIVACY POLICY</span></p>
         </form>
       </section>
     </>
@@ -129,3 +125,4 @@ const Signup = () => {
 }
 
 export default Signup
+

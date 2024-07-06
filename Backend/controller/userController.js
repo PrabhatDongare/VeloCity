@@ -141,7 +141,8 @@ exports.forgotPassword = async function (req, res) {
         // Auth Token given
         const data = { "user": { id: user.id } }
         const authToken = jwt.sign(data, process.env.JWT_SECRET, { expiresIn: "5m" });
-        let link = `http://localhost:5173/account/reset-password/${user.id}/${authToken}`
+        const link = `http://localhost:5173/account/reset-password/${authToken}`
+        console.log(authToken)
 
         // Send reset link through email
         await transporter.sendMail({
@@ -152,12 +153,12 @@ exports.forgotPassword = async function (req, res) {
             to: email,
             subject: "Customer account password reset",
             html:
-                `<h5>Click here to reset password <a href=${link}></a>CLICK</h5>`,
+                `<h5>Click here to reset password <a target="_blank" href=${link}> CLICK </a></h5>`,
         });
 
-        success = true;
-        console.log("id : ", user.id, " , ", "token : ", authToken)
-        res.status(200).json({ success, message: "Email Notification Sent..." })
+        success = true
+        // console.log("id : ", user.id, " , ", "token : ", authToken, success)
+        res.status(200).json({ success, authToken, message: "Email Notification Sent..." })
 
     }
     catch (error) {
@@ -174,30 +175,29 @@ exports.resetPassword = async function (req, res) {
     }
     let success = false;
     try {
-        const { id, token } = req.params;
-        const { password } = req.body;
+        const { password, token } = req.body;
 
         // Verify the token
         let data;
         try {
             data = jwt.verify(token, process.env.JWT_SECRET);
+
+            // Generate hashed password
+            const salt = await bcrypt.genSalt(10);
+            const hashPassword = await bcrypt.hash(password, salt);
+
+            // Update the user's password
+            const user = await prisma.user.update({
+                where: { id: parseInt(data.user.id) },
+                data: { password: hashPassword }
+            });
+
+            success = true;
+            return res.status(200).json({ success, message: "Password reset successful" });
+
         } catch (error) {
             return res.status(401).json({ success, message: "Invalid Token" });
         }
-
-        // Generate hashed password
-        const salt = await bcrypt.genSalt(10);
-        const hashPassword = await bcrypt.hash(password, salt);
-
-        // Update the user's password
-        const user = await prisma.user.update({
-            where: { id: parseInt(id) },
-            data: { password: hashPassword }
-        });
-
-        success = true;
-        return res.status(200).json({ success, message: "Password reset successful" });
-
     } catch (error) {
         console.error(error.message);
         return res.status(500).json({ success, message: "Internal Server Error" });
@@ -229,18 +229,18 @@ exports.getUser = async function (req, res) {
 exports.addAddress = async function (req, res) {
     try {
         const user_id = req.user.id
-        const { street_name, additional, zipcode, city, country } = req.body;
+        const { house_no, street_name, zipcode, city, country, phone } = req.body;
         // Check if Address already exists
         const checkAddress = await prisma.address.findFirst({
             where: { user_id: parseInt(user_id) }
         })
         if (checkAddress) {
-            return res.status(400).json({ success: false, message: `Address already present, you can't update it` });
+            return res.status(400).json({ success: false, message: `Address already present, you can update it` });
         }
 
         // Adding new address
         const address = await prisma.address.create({
-            data: { user_id: parseInt(user_id), street_name, additional, zipcode, city, country }
+            data: { user_id: parseInt(user_id), house_no, street_name, zipcode, city, country, phone: parseInt(phone) }
         });
         res.status(200).json({ success: true, address });
     } catch (error) {
@@ -253,7 +253,8 @@ exports.addAddress = async function (req, res) {
 exports.updateAddress = async function (req, res) {
     try {
         const user_id = req.user.id
-        const { street_name, additional, zipcode, city, country } = req.body;
+        const { house_no, street_name, zipcode, city, country, phone } = req.body;
+        
         // Find the address associated with the user
         const address = await prisma.address.findFirst({
             where: { user_id: parseInt(user_id) }
@@ -265,9 +266,9 @@ exports.updateAddress = async function (req, res) {
         // Updating address
         const updatedAddress = await prisma.address.update({
             where: { id: address.id },
-            data: { street_name, additional, zipcode, city, country }
+            data: { house_no, street_name, zipcode, city, country, phone: parseInt(phone) }
         });
-        res.status(200).json({ success: true, address: updatedAddress, message: "Address updated successfully" });
+        res.status(200).json({ success: true, updatedAddress, message: "Address updated successfully" });
 
     } catch (error) {
         console.error(error.message);
@@ -279,18 +280,18 @@ exports.updateAddress = async function (req, res) {
 exports.getAddress = async function (req, res) {
     try {
         const user_id = req.user.id
-        const address = await prisma.address.findMany({
+        const address = await prisma.address.findFirst({
             where: { user_id: parseInt(user_id) },
         });
         if (!address) {
-            return res.status(404).json({ success: false, message: 'Address not found' });
+            // return res.status(404).json({ success: false, message: 'Address not found' });
+            return res.status(200).json({ success: false });
         }
-        console.log(address)
         res.status(200).json({ success: true, address });
 
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
+        res.status(500).json({ success, message: 'Internal Server Error' });
     }
 }
 

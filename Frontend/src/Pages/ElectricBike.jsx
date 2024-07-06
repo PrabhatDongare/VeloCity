@@ -4,8 +4,10 @@ import { Link } from 'react-router-dom';
 import Header from '../Components/Header';
 const DisplayProduct = React.lazy(() => import('../Components/DisplayProduct'));
 const CustomVideo = React.lazy(() => import('../Components/CustomVideo'));
+import LoadingAnimation from '../Components/LoadingAnimation';
 
 const Accessories = () => {
+
   return (
     <>
       {/* Color: [#ebedee] */}
@@ -26,7 +28,7 @@ const Accessories = () => {
       </section>
 
       {/* 2 Display Products */}
-      <Suspense fallback={<div className='text-center'>Loading...</div>}>
+      <Suspense fallback={<LoadingAnimation/>}>
         <DisplayProduct />
       </Suspense>
 
@@ -37,7 +39,7 @@ const Accessories = () => {
           muted autoPlay loading="lazy"  >
           <source src="https://download-video.akamaized.net/v3-1/playback/2eedaa5a-0304-459b-91ee-44226882912b/456ba3e7-db73988f?__token__=st=1714939532~exp=1714953932~acl=%2Fv3-1%2Fplayback%2F2eedaa5a-0304-459b-91ee-44226882912b%2F456ba3e7-db73988f%2A~hmac=f341c6aeaca79871154f384f1a6786508f3cbec217d61caeb2deca7208ce8553&r=dXMtZWFzdDE%3D" />
         </video> */}
-        <Suspense fallback={<div className='text-center'>Loading...</div>}>
+        <Suspense fallback={<LoadingAnimation/>}>
           <div className='absolute'>
             <CustomVideo videoDimension={"h-[100vh] w-[98.9vw] bg-[#a8abac]"} videoButton={"flex items-end pb-10 justify-center text-9xl h-[100vh] w-[98.9vw] "}
               videoSrc={"https://download-video.akamaized.net/v3-1/playback/2eedaa5a-0304-459b-91ee-44226882912b/456ba3e7-db73988f?__token__=st=1714939532~exp=1714953932~acl=%2Fv3-1%2Fplayback%2F2eedaa5a-0304-459b-91ee-44226882912b%2F456ba3e7-db73988f%2A~hmac=f341c6aeaca79871154f384f1a6786508f3cbec217d61caeb2deca7208ce8553&r=dXMtZWFzdDE%3D"} />
@@ -56,7 +58,7 @@ const Accessories = () => {
         <div className='w-1/2 px-28 my-auto'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Ace Two</h1>
           <p className='py-7 '>Introducing the Ace Two, the electric bike redefining your daily commute by offering cutting-edge technology, design, and safety features. Relish instant power, convenience, and peace of mind on every commute with automatic gear shifting, a silent mid-motor, bright LED brake lights, and safety tracking.</p>
-          <Link to="/" className='underline font-montserrat-medium ' >Learn More</Link>
+          <Link to="/products/ace" className='hover:underline font-montserrat-medium ' >Learn More</Link>
         </div>
         <img src="/images/Electric Bike/Electric_overview_desktop_mobile_1.webp" alt="Ace Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
       </section>
@@ -67,7 +69,7 @@ const Accessories = () => {
         <div className='w-1/2 pl-28 pr-10 my-auto'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Ivy Two</h1>
           <p className='py-7'>Introducing the Ivy Two, the electric bike that takes your daily commute to the next level. With an accessible lower frame, the latest technology, and safety features, the Ivy delivers instant power, convenience, and peace of mind at every turn, making it the go-to bike for any commute. Equipped with a bright LED brake light for enhanced visibility and safety tracking for added security, the Ivy Two is the perfect combination of design, technology, and safety.</p>
-          <Link to="/" className='underline font-montserrat-medium ' >Learn More</Link>
+          <Link to="/products/ivy" className='hover:underline font-montserrat-medium ' >Learn More</Link>
         </div>
       </section>
 
@@ -75,7 +77,7 @@ const Accessories = () => {
       <section className='ml-24 w-5/6 my-10'>
         <h1 className='text-7xl' >Test ride our Electric Ivy or Ace</h1>
         <p className='py-8 text-[#989999]' >Discovering your ideal bike just got easier. Schedule a test ride at one of our testing locations and experience our Ivy and Ace Two up close and personal.</p>
-        <button className='px-7 py-3 border-[0.5px] rounded-full'>Book now</button>
+        <Link to="/store" className='px-7 py-3 border-[0.5px] rounded-full'>Book now</Link>
       </section>
       <img src="/images/Electric Bike/Electric_overview_desktop_4.webp" alt="Test Ride" loading='lazy' className='h-[65vh] w-full object-cover' />
 
@@ -84,7 +86,7 @@ const Accessories = () => {
         <div className='w-1/2 px-24 my-auto'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Ride carefree</h1>
           <p className='py-7 '>Our Qover x VeloCity insurance plan has got you covered. It offers comprehensive coverage against theft, provides assistance in case of any issues, and covers any damages to your bike.</p>
-          <Link to="/" className='underline font-montserrat-medium ' >Learn More</Link>
+          <Link to="/" className='hover:underline hover:text-red-500 font-montserrat-medium ' >Learn More</Link>
         </div>
         <img src="/Common/Homepage_desktop_mobile_2.webp" alt="Ace Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
       </section>
@@ -95,7 +97,7 @@ const Accessories = () => {
         <div className='w-1/2 pl-28 pr-16 my-auto'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Leasing</h1>
           <p className='py-7'>Does your Dutch employer offer a bike scheme? Then you might be able to lease a VeloCity Ivy or Ace Two and benefit from the great tax incentives. Embrace a new era of commuting from €75 a month.</p>
-          <Link to="/" className='underline font-montserrat-medium ' >Learn More</Link>
+          <Link to="/bike-leasing" className='hover:underline font-montserrat-medium ' >Learn More</Link>
         </div>
       </section>
 
@@ -105,7 +107,7 @@ const Accessories = () => {
         <div className='mx-40 my-28 relative'>
           <h1 className='text-7xl w-[500px] font-montserrat-medium'>Everything in one app <span className="text-4xl ml-1 top-[105px] absolute">&#9642;</span> </h1>
           <p className='w-[420px] py-7' >We believe in technology elevating your life, particularly in managing your bike. Our constantly evolving app connects and empowers you to control your bike effortlessly.From monitoring ride performance to managing battery life, our app&rsquo;s intuitive interface makes customizing ride settings and preferences easy.</p>
-          <Link to="/" className='underline font-montserrat-medium ' >Learn More</Link>
+          <button className='font-montserrat-medium underline hover:text-red-500' >Learn More</button>
         </div>
       </section>
     </>

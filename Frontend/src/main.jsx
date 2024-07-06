@@ -12,6 +12,7 @@ import ElectricBike from './Pages/ElectricBike.jsx'
 import CityBike from './Pages/CityBike.jsx'
 import Store from './Pages/Store.jsx'
 import Accessories from './Pages/Accessories.jsx'
+import AccessoriesItem from './Pages/AccessoriesItem.jsx'
 import Employees from './Pages/Leasing/Employees.jsx'
 import Employers from './Pages/Leasing/Employers.jsx'
 import Ace from './Pages/Products/Ace.jsx'
@@ -24,11 +25,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { store } from './redux/store.js'
 import { Provider } from 'react-redux'
 
+
 import './index.css'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 const router = createBrowserRouter([
   {
@@ -52,7 +51,7 @@ const router = createBrowserRouter([
         element: <ForgotPassword />,
       },
       {
-        path: "/account/reset-password/:id/:token",
+        path: "/account/reset-password/:token",
         element: <ResetPassword />,
       },
       {
@@ -74,6 +73,10 @@ const router = createBrowserRouter([
       {
         path: "accessories",
         element: <Accessories />,
+      },
+      {
+        path: "/accessory/:url_slug",
+        element: <AccessoriesItem />,
       },
       {
         path: "bike-leasing",
@@ -103,7 +106,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
-      <ToastContainer position="bottom-right" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss={false} draggable pauseOnHover theme="light" transition:Bounce />
+      <ToastContainer position="bottom-left" autoClose={2000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss={false} draggable pauseOnHover theme="light" transition:Bounce />
     </Provider>
   </React.StrictMode>,
 )

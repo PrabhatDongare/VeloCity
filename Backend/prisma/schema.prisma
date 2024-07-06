@@ -61,11 +61,12 @@ model Address {
   id          Int     @id @default(autoincrement())
   user        User    @relation(fields: [user_id], references: [id], onDelete: Cascade, onUpdate: Cascade)
   user_id     Int
-  street_name String
-  additional  String?
+  house_no    String
+  street_name String?
   zipcode     String
   city        String
   country     String
+  phone       Int?     @default(1000000000)
   orders      Order[]
 }
 

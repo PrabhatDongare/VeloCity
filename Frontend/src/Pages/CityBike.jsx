@@ -3,8 +3,10 @@ import React, { Suspense } from 'react'
 import Header from "../Components/Header"
 const ProductsCarousel = React.lazy(() => import('../Sections/City Bike/CarouselProducts'));
 const CustomVideo = React.lazy(() => import('../Components/CustomVideo'));
+import LoadingAnimation from '../Components/LoadingAnimation';
 
 const CityBike = () => {
+
   return (
     <>
       <Header />
@@ -33,7 +35,7 @@ const CityBike = () => {
 
       {/* City Bike Carousel */}
       <section id="cityBikeCarousel" className="h-[111vh] bg-[#a8abac] pt-20 pl-24">
-        <Suspense fallback={<div className='text-center'>Loading...</div>}>
+        <Suspense fallback={<LoadingAnimation/>}>
           <ProductsCarousel />
         </Suspense>
       </section>
@@ -49,7 +51,7 @@ const CityBike = () => {
             muted autoPlay loading="lazy"  >
             <source src="https://download-video.akamaized.net/v3-1/playback/dc57906d-5d95-4009-9f48-714937988f0a/0bfcb30e-35e16af9?__token__=st=1714940205~exp=1714954605~acl=%2Fv3-1%2Fplayback%2Fdc57906d-5d95-4009-9f48-714937988f0a%2F0bfcb30e-35e16af9%2A~hmac=2d335daf4e68bd0458b694bb011b2021eb675e39bcc4993bc7828bbb81bd4c05&r=dXMtZWFzdDE%3D" />
           </video> */}
-          <Suspense fallback={<div className='text-center'>Loading...</div>}>
+          <Suspense fallback={<LoadingAnimation/>}>
             <div className='w-[450px] absolute z-10 top-[650px] left-96 '>
               <CustomVideo videoDimension={"object-cover"} videoButton={"absolute text-9xl top-[270px] left-[160px]"}
                 videoSrc={"https://download-video.akamaized.net/v3-1/playback/dc57906d-5d95-4009-9f48-714937988f0a/0bfcb30e-35e16af9?__token__=st=1714940205~exp=1714954605~acl=%2Fv3-1%2Fplayback%2Fdc57906d-5d95-4009-9f48-714937988f0a%2F0bfcb30e-35e16af9%2A~hmac=2d335daf4e68bd0458b694bb011b2021eb675e39bcc4993bc7828bbb81bd4c05&r=dXMtZWFzdDE%3D"} />

@@ -30,10 +30,6 @@ const DisplayProduct = () => {
       );
     };
 
-    const handleGoToIvy = () => {
-      navigate('/products/ivy')
-    }
-
   return (
     <>
       <div id="scrollToProducts" className="mx-14 my-10 py-10 flex gap-16">
@@ -53,8 +49,8 @@ const DisplayProduct = () => {
 
           <div className="text-black flex items-center justify-between">
             <div>
-              <Link to="products/ace" className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
-              <Link to="products/ace" className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
+              <Link to="/products/ace" className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
+              <Link to="/products/ace" className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
             </div>
 
             <div className="flex gap-6">
@@ -69,7 +65,7 @@ const DisplayProduct = () => {
         {/* Product 2 */}
         <div className="bg-[#ebedee] w-1/2 rounded-xl px-10 py-10 font-montserrat">
           <p className="text-3xl relative">
-            <span>Electric Ace</span>
+            <span>Electric Ivy</span>
             <span className="text-sm absolute">Two</span>
           </p>
           <p className="py-5 text-lg">Rider height: 173 - 200cm</p>
@@ -82,8 +78,10 @@ const DisplayProduct = () => {
 
           <div className="text-black flex items-center justify-between">
             <div>
-              <Link to="products/ivy" onClick={handleGoToIvy} className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
-              <Link to="products/ivy" onClick={handleGoToIvy} className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
+              {/* <Link to="products/ivy" onClick={handleGoToIvy} className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
+              <Link to="products/ivy" onClick={handleGoToIvy} className="text-xs underline pl-10 underline-offset-2">Learn More</Link> */}
+              <Link to="/products/ivy" className="text-sm bg-white rounded-full py-3 px-7 hover:text-white hover:bg-black">Buy Now</Link>
+              <Link to="/products/ivy" className="text-xs underline pl-10 underline-offset-2">Learn More</Link>
             </div>
 
             <div className="flex gap-6">

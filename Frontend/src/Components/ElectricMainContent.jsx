@@ -2,10 +2,9 @@ import React, { Suspense } from 'react'
 import { BsDownload } from "react-icons/bs";
 import { TbBookDownload } from "react-icons/tb";
 import PropTypes from 'prop-types';
+import LoadingAnimation from './LoadingAnimation';
 
 const CustomVideo = React.lazy(() => import('./CustomVideo'));
-const InteractiveCycleDiagram = React.lazy(() => import('./InteractiveDiagram'));
-import { Ace_Two, Ivy_Two } from "../Utils/product"
 
 const ElectricMainContent = ({ productName }) => {
 
@@ -20,7 +19,7 @@ const ElectricMainContent = ({ productName }) => {
     <>
 
       <section className='relative'>
-        <Suspense fallback={<div className='text-center'>Loading...</div>}>
+        <Suspense fallback={<LoadingAnimation/>}>
           <CustomVideo videoDimension={"h-[100vh] w-full"} videoButton={"flex items-center justify-center text-9xl h-[100vh] w-full"}
             videoSrc={"https://download-video.akamaized.net/v3-1/playback/c920f1ef-8e46-4301-9ebe-1acaa3ec80b8/33dfa638-384b84f8?__token__=st=1714986235~exp=1715000635~acl=%2Fv3-1%2Fplayback%2Fc920f1ef-8e46-4301-9ebe-1acaa3ec80b8%2F33dfa638-384b84f8%2A~hmac=eaacc098330b866e0ca6e70621051b4d541a9b958a3cd20b47f6f04bb4faa40d&r=dXMtZWFzdDE%3D"} />
         </Suspense>
@@ -50,7 +49,7 @@ const ElectricMainContent = ({ productName }) => {
 
       <section className='flex'>
         <div className='w-1/2'>
-          <Suspense fallback={<div className='text-center'>Loading...</div>}>
+          <Suspense fallback={<LoadingAnimation/>}>
             <CustomVideo videoDimension={"h-[100vh]"} videoButton={"flex items-center justify-center text-9xl h-[100vh]"}
               videoSrc={"https://download-video.akamaized.net/v3-1/playback/c920f1ef-8e46-4301-9ebe-1acaa3ec80b8/33dfa638-384b84f8?__token__=st=1714986235~exp=1715000635~acl=%2Fv3-1%2Fplayback%2Fc920f1ef-8e46-4301-9ebe-1acaa3ec80b8%2F33dfa638-384b84f8%2A~hmac=eaacc098330b866e0ca6e70621051b4d541a9b958a3cd20b47f6f04bb4faa40d&r=dXMtZWFzdDE%3D"} />
           </Suspense>
@@ -63,7 +62,7 @@ const ElectricMainContent = ({ productName }) => {
       </section>
 
       <section className='relative'>
-        <Suspense fallback={<div className='text-center'>Loading...</div>}>
+        <Suspense fallback={<LoadingAnimation/>}>
           <CustomVideo videoDimension={"h-[100vh] w-full"} videoButton={"flex items-center justify-center text-9xl h-[100vh] w-full"}
             videoSrc={"https://download-video.akamaized.net/v3-1/playback/3f3875a9-c99e-4750-b025-542dd3fdee1c/70395819-f0cac7b5?__token__=st=1714988509~exp=1715002909~acl=%2Fv3-1%2Fplayback%2F3f3875a9-c99e-4750-b025-542dd3fdee1c%2F70395819-f0cac7b5%2A~hmac=923201315a423bf39af777b19c3cd1010db8dbcb7effd5987b478deaee51ac83&r=dXMtd2VzdDE%3D"} />
         </Suspense>
@@ -137,11 +136,6 @@ const ElectricMainContent = ({ productName }) => {
         </div>
       </section>
 
-      <section className="mb-28 " >
-          <Suspense fallback={<div className='text-center'>Loading...</div>}>
-            <InteractiveCycleDiagram productLink={ productName == "Ace_Two" ? Ace_Two["Matte Black"][0] : Ivy_Two["Matte Black"][0] } />
-          </Suspense>
-      </section>
       <hr />
 
       {/* Product Specification */}

@@ -8,7 +8,7 @@ import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 const ButtonGroup = ({ previous, goToSlide, ...rest }) => {
   const { carouselState: { currentSlide } } = rest;
   return (
-    <div className="absolute flex gap-4 z-50 p-2 right-0">
+    <div className="absolute flex gap-4 z-40 p-2 right-0">
       <button
         className={` text-5xl absolute top-[-330px] left-[-130px] ${currentSlide === 0 ? 'text-[#bbbcbc]' : ''}`}
         onClick={() => previous()} 
