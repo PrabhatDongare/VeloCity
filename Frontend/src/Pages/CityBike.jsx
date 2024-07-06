@@ -53,8 +53,9 @@ const CityBike = () => {
           </video> */}
           <Suspense fallback={<LoadingAnimation/>}>
             <div className='w-[450px] absolute z-10 top-[650px] left-96 '>
-              <CustomVideo videoDimension={"object-cover"} videoButton={"absolute text-9xl top-[270px] left-[160px]"}
-                videoSrc={"https://download-video.akamaized.net/v3-1/playback/dc57906d-5d95-4009-9f48-714937988f0a/0bfcb30e-35e16af9?__token__=st=1714940205~exp=1714954605~acl=%2Fv3-1%2Fplayback%2Fdc57906d-5d95-4009-9f48-714937988f0a%2F0bfcb30e-35e16af9%2A~hmac=2d335daf4e68bd0458b694bb011b2021eb675e39bcc4993bc7828bbb81bd4c05&r=dXMtZWFzdDE%3D"} />
+              <img src="images/City Bike/1G5A7367_FullSize_1.webp" alt="City-bike-footer-img" loading='lazy' />
+              {/* <CustomVideo videoDimension={"object-cover"} videoButton={"absolute text-9xl top-[270px] left-[160px]"}
+                videoSrc={"https://download-video.akamaized.net/v3-1/playback/dc57906d-5d95-4009-9f48-714937988f0a/0bfcb30e-35e16af9?__token__=st=1714940205~exp=1714954605~acl=%2Fv3-1%2Fplayback%2Fdc57906d-5d95-4009-9f48-714937988f0a%2F0bfcb30e-35e16af9%2A~hmac=2d335daf4e68bd0458b694bb011b2021eb675e39bcc4993bc7828bbb81bd4c05&r=dXMtZWFzdDE%3D"} /> */}
             </div>
           </Suspense>
 

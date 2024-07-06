@@ -34,7 +34,7 @@ const Employees = () => {
       </section>
 
       {/* Content 1 */}
-      <section className='mx-14 mt-24 mb-36 flex gap-20 '>
+      <section className='mx-14 mt-24 mb-36 flex gap-20 text-[#7c7c7c]'>
         <img src="/images/Employees/Leasing_form_desktop_mobile.webp" alt="Ivy Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
         <div className='w-1/2 pl-28 pr-10 my-auto font-montserrat-light'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Start your lease request</h1>
@@ -46,7 +46,7 @@ const Employees = () => {
 
       {/* Leasing Form */}
       <section className='w-4/6 mx-auto'>
-        <h1 id='leasing' className='my-16 text-5xl font-montserrat-medium text-center relative'>
+        <h1 id='leasing' className='my-16 text-5xl font-montserrat-medium text-center relative text-[#7c7c7c]'>
           <span>Lease your Ivy or Ace</span>
           <span className="text-xl font-montserrat-medium absolute ml-0.5">Two</span>
         </h1>

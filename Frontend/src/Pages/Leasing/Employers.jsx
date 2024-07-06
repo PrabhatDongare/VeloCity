@@ -92,7 +92,7 @@ const Employers = () => {
       {/* Content 1 */}
       <section className='mx-14 mt-24 mb-36 flex gap-20 '>
         <img src="/images/Employers/Leasing_desktop_mobile.webp" alt="Ivy Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
-        <div className='w-1/2 pl-28 pr-10 my-auto'>
+        <div className='w-1/2 pl-28 pr-10 my-auto text-[#7c7c7c]'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Lease bikes</h1>
           <p className='py-7'>Want to offer your employees the great perk of stylish and sustainable mobility? In the Netherlands, this is super easy with a bike plan. It’s cost-free for employers and outside of the work-related costs scheme (WKR).</p>
           <Link to="/bike-leasing" className='underline font-montserrat-medium ' >Discover More</Link>
@@ -101,7 +101,7 @@ const Employers = () => {
 
       {/* Content 2 */}
       <section className='mx-14 my-28 flex gap-20 '>
-        <div className='w-1/2 pl-28 pr-10 my-auto'>
+        <div className='w-1/2 pl-28 pr-10 my-auto text-[#7c7c7c]'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>Lease bikes</h1>
           <p className='py-7'>Want to offer your employees the great perk of stylish and sustainable mobility? In the Netherlands, this is super easy with a bike plan. It’s cost-free for employers and outside of the work-related costs scheme (WKR).</p>
           <Link to="/bike-leasing" className='underline font-montserrat-medium ' >Discover More</Link>
@@ -112,7 +112,7 @@ const Employers = () => {
       {/* Content 3 */}
       <section className='mx-14 mt-24 mb-36 flex gap-20 '>
         <img src="/images/Home/carlanicieza.webp" alt="Ivy Two" className='w-[43vw] h-[99vh] object-cover' loading='lazy' />
-        <div className='w-1/2 pl-28 pr-10 my-auto font-montserrat-regular text-[#717171]'>
+        <div className='w-1/2 pl-28 pr-10 my-auto font-montserrat-regular text-[#7c7c7c]'>
           <h1 className='font-montserrat-medium text-5xl font-medium'>How it works</h1>
 
           <p className='pt-8 text-xl'><span className='text-black bg-[#d0d1d0] rounded-full px-2.5 py-1 mr-2'>1.</span>Register your company</p>
@@ -131,7 +131,7 @@ const Employers = () => {
 
       {/* Form */}
       <section className='mb-14 mx-auto w-4/6'  >
-        <h1 id='leasing' className='text-5xl font-montserrat-medium text-center'>Get in touch</h1>
+        <h1 id='leasing' className='text-5xl font-montserrat-medium text-center text-[#7c7c7c]'>Get in touch</h1>
         {requestForm ? <form onSubmit={handleSubmit(onSubmit)} className='pt-16 flex flex-col gap-10 font-montserrat-light text-sm'>
           {/* First Name */}
           <div className='flex flex-col gap-3' >

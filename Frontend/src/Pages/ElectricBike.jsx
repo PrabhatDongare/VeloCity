@@ -14,10 +14,11 @@ const Accessories = () => {
       <Header />
       {/* Main TOP */}
       <section className='h-[93vh] text-white font-montserrat-medium'>
-        <video className="absolute top-0 h-full w-full object-cover -z-50 bg-[#a8abac]"
+        {/* <video className="absolute top-0 h-full w-full object-cover -z-50 bg-[#a8abac]"
           autoPlay loop muted >
           <source src="https://download-video.akamaized.net/v3-1/playback/05a6ff4f-74e7-4a83-8703-bc02346881bf/3fb4ac23-c9f4a737?__token__=st=1714939114~exp=1714953514~acl=%2Fv3-1%2Fplayback%2F05a6ff4f-74e7-4a83-8703-bc02346881bf%2F3fb4ac23-c9f4a737%2A~hmac=012b5a4631a489d98845988c3603d21bd03016c67cbdcc842dc679e3353179fa&r=dXMtd2VzdDE%3D" />
-        </video>
+        </video> */}
+        <img className="absolute top-0 h-full w-full object-cover -z-50 bg-[#a8abac]" src="/images/Electric Bike/Electric1_desktop.webp" alt="electric-bike-hero" loading='lazy' />
 
         <div className="pt-48 px-12 ">
           <p className='animate-slideUp w-1/6' >VELOCITY ELECTRIC</p>
@@ -40,17 +41,18 @@ const Accessories = () => {
           <source src="https://download-video.akamaized.net/v3-1/playback/2eedaa5a-0304-459b-91ee-44226882912b/456ba3e7-db73988f?__token__=st=1714939532~exp=1714953932~acl=%2Fv3-1%2Fplayback%2F2eedaa5a-0304-459b-91ee-44226882912b%2F456ba3e7-db73988f%2A~hmac=f341c6aeaca79871154f384f1a6786508f3cbec217d61caeb2deca7208ce8553&r=dXMtZWFzdDE%3D" />
         </video> */}
         <Suspense fallback={<LoadingAnimation/>}>
-          <div className='absolute'>
+          <div className=''>
             <CustomVideo videoDimension={"h-[100vh] w-[98.9vw] bg-[#a8abac]"} videoButton={"flex items-end pb-10 justify-center text-9xl h-[100vh] w-[98.9vw] "}
-              videoSrc={"https://download-video.akamaized.net/v3-1/playback/2eedaa5a-0304-459b-91ee-44226882912b/456ba3e7-db73988f?__token__=st=1714939532~exp=1714953932~acl=%2Fv3-1%2Fplayback%2F2eedaa5a-0304-459b-91ee-44226882912b%2F456ba3e7-db73988f%2A~hmac=f341c6aeaca79871154f384f1a6786508f3cbec217d61caeb2deca7208ce8553&r=dXMtZWFzdDE%3D"} />
+              // videoSrc={"https://download-video.akamaized.net/v3-1/playback/2eedaa5a-0304-459b-91ee-44226882912b/456ba3e7-db73988f?__token__=st=1714939532~exp=1714953932~acl=%2Fv3-1%2Fplayback%2F2eedaa5a-0304-459b-91ee-44226882912b%2F456ba3e7-db73988f%2A~hmac=f341c6aeaca79871154f384f1a6786508f3cbec217d61caeb2deca7208ce8553&r=dXMtZWFzdDE%3D"} />
+              videoSrc={"https://download-video.akamaized.net/v3-1/playback/7622a2a2-dcb6-4f2d-98de-9a0c11b8bab0/b9c5e884-23b5d74c?__token__=st=1720278837~exp=1720293237~acl=%2Fv3-1%2Fplayback%2F7622a2a2-dcb6-4f2d-98de-9a0c11b8bab0%2Fb9c5e884-23b5d74c%2A~hmac=ac09c7b925d695fd84cee07018e524464765ae4dd066dfeb3610171d2a57f47a&r=dXMtd2VzdDE%3D"} />
           </div>
         </Suspense>
 
-        <div className='select-none flex flex-col justify-center items-center h-[100vh] gap-7 '>
+        {/* <div className='select-none flex flex-col justify-center items-center h-[100vh] gap-7 '>
           <h1 className='text-9xl'>Safety first</h1>
           <p>We designed our Ivy and Ace Two with safe city riding in mind.</p>
           <p>The automatic rare break light shines instantly and brightly, so others on the road know if you&rsquo;re slowing down or stopping.</p>
-        </div>
+        </div> */}
       </section>
 
       {/* SECTION 2: Ace Two */}

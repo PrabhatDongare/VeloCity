@@ -210,7 +210,7 @@ const Accessories = () => {
                   <p className='flex items-center gap-2' > <FaLandmarkFlag />{pageData.address.city} {pageData.address.zipcode}</p>
                   <p className='flex items-center gap-2' ><FaGlobeAmericas /> {pageData.address.country}</p>
                   <div>{pageData.address.phone != null && <p className='flex items-center gap-2'><IoIosCall />{pageData.address.phone}</p>}</div>
-                  <button onClick={() => handleOpenAddressModal(true)} className='w-full bg-black text-white border border-[#a8abac] py-3 my-6 rounded-full hover:bg-white hover:text-black' >Edit Address</button>
+                  <button onClick={() => handleOpenAddressModal(true)} className='w-1/3 bg-black text-white border border-[#a8abac] py-3 my-6 rounded-full hover:bg-white hover:text-black' >Edit Address</button>
                 </div>}
               {isModalOpen === "editAddress" &&
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">
