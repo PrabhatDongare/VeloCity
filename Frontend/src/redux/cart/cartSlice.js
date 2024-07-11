@@ -19,60 +19,70 @@ export const fetchUserCart = createAsyncThunk("fetchUserCart", async (_, { rejec
     }
 });
 
-// export const fetchUserCart = createAsyncThunk("fetchUserCart", async ({ rejectWithValue }) => {
-//     console.log("reached ?")
-//     try {
-//         console.log("trying to fetch cart")
+export const requestAddToCart = createAsyncThunk("requestAddToCart", async ({ item_type, url_slug, quantity }, { rejectWithValue }) => {
+    try {
+        const headers = {
+            'Content-Type': 'application/json',
+            'authToken': localStorage.getItem('token'),
+        };
+        const response = await axios.post(`${baseUrl}api/cart/add/${item_type}/${url_slug}/${quantity}`, {}, { headers });
+        return response.data;
 
-//     } catch (error) {
-//         console.log(error)
-//         return rejectWithValue(error.response.data.message);
-//     }
-// });
+    } catch (error) {
+        console.log(error)
+        return rejectWithValue(error.response.data.message);
+    }
+});
 
-// export const addToUserCart = createAsyncThunk("addToUserCart", async ({ rejectWithValue }) => {
-//     try {
-//         const response = await axios.post(`${baseUrl}api/cart/add/---`);
-//         return response.data;
+export const updateUserCart = createAsyncThunk("updateUserCart", async ({ item_type, url_slug, inc }, { rejectWithValue }) => {
+    try {
+        const headers = {
+            'Content-Type': 'application/json',
+            'authToken': localStorage.getItem('token'),
+        };
+        // console.log( "THis is to check input for update Cart : ", item_type, url_slug, inc)
+        const response = await axios.put(`${baseUrl}api/cart/update`, { item_type, url_slug, inc }, { headers });
+        return response.data;
 
-//     } catch (error) {
-//         console.log(error)
-//         return rejectWithValue(error.response.data.message);
-//     }
-// });
+    } catch (error) {
+        console.log(error)
+        return rejectWithValue(error.response.data.message);
+    }
+});
 
-// export const updateUserCart = createAsyncThunk("updateUserCart", async ({ rejectWithValue }) => {
-//     try {
-//         const response = await axios.post(`${baseUrl}api/cart/update`);
-//         return response.data;
+export const removeCartItem = createAsyncThunk("removeCartItem", async ({ url_slug }, { rejectWithValue }) => {
+    try {
+        const headers = {
+            'Content-Type': 'application/json',
+            'authToken': localStorage.getItem('token'),
+        };
+        const response = await axios.delete(`${baseUrl}api/cart/remove/${url_slug}`, { headers });
+        return response.data;
 
-//     } catch (error) {
-//         console.log(error)
-//         return rejectWithValue(error.response.data.message);
-//     }
-// });
-
-// export const removeFromUserCart = createAsyncThunk("removeFromUserCart", async ({ rejectWithValue }) => {
-//     try {
-//         const response = await axios.post(`${baseUrl}api/cart/remove`);
-//         return response.data;
-
-//     } catch (error) {
-//         console.log(error)
-//         return rejectWithValue(error.response.data.message);
-//     }
-// });
+    } catch (error) {
+        console.log(error)
+        return rejectWithValue(error.response.data.message);
+    }
+});
 
 export const cartSlice = createSlice({
     name: 'cart',
-    initialState: { userCart: [] },
+    initialState: { userCart: [], cartTotal: 0 },
 
     reducers: {
-        frontendAddToCart: (state, action) => {
-            const { id, item_type, url_slug, quantity, price, total_amount } = action.payload
-            state.userCart.push({ id, item_type, url_slug, quantity, price, total_amount })
-            // console.log(state.userCart)
+        findCartTotal:(state) =>{
+            if(state.userCart.length > 0){
+                state.cartTotal = 0
+                state.userCart.map(cartItem => 
+                    state.cartTotal += cartItem.total_amount
+                )
+                state.cartTotal = state.cartTotal.toFixed(2)
+            }
         },
+
+        emptyCurrentUserCartFromFrontend: (state) => {
+            state.userCart = []
+        }
     },
 
     extraReducers: (builder) => {
@@ -80,7 +90,7 @@ export const cartSlice = createSlice({
             // fetchUserCart
             .addCase(fetchUserCart.fulfilled, (state, action) => {
                 const { success, cart } = action.payload
-                if (success) {
+                if (success && cart.length > 0) {
                     state.userCart = cart.map(cartCol => {
                         return {
                             id: cartCol.id,
@@ -92,41 +102,60 @@ export const cartSlice = createSlice({
                         }
                     })
                 }
-                // console.log(state.userCart, "Printing userCart")
+                cartSlice.caseReducers.findCartTotal(state);
             })
-            
             .addCase(fetchUserCart.rejected, (state, action) => {
                 toast.error(action.payload)
             })
 
-        // // addToUserCart
-        // .addCase(addToUserCart.fulfilled, (state, action) => {
-        //     const { success } = action.payload
+            // requestAddToCart
+            .addCase(requestAddToCart.fulfilled, (state, action) => {
+                const { success, message } = action.payload
+                if (success) {
+                    toast.success(message)
+                    cartSlice.caseReducers.findCartTotal(state);
+                }
+            })
+            .addCase(requestAddToCart.rejected, (state, action) => {
+                toast.error(action.payload)
+            })
+            
+            // updateUserCart
+            .addCase(updateUserCart.fulfilled, (state, action) => {
+                const { success, newTotalAmount, url_slug, inc } = action.payload
+                if(success){
+                    state.userCart = state.userCart.map(cartItem => {
+                        if(cartItem.url_slug === url_slug){
+                            if(inc){
+                                return { ...cartItem, quantity: cartItem.quantity + 1, total_amount: newTotalAmount }
+                            }
+                            else{
+                                return { ...cartItem, quantity: cartItem.quantity - 1, total_amount: newTotalAmount }
+                            }
+                        }
+                        return cartItem;
+                    })
+                    cartSlice.caseReducers.findCartTotal(state);
+                }
+            })
+            .addCase(updateUserCart.rejected, (state, action) => {
+                toast.error(action.payload)
+            })
 
-        // })
-        // .addCase(addToUserCart.rejected, (state, action) => {
-        //     toast.error(action.payload)
-        // })
-
-        // // updateUserCart
-        // .addCase(updateUserCart.fulfilled, (state, action) => {
-        //     const { success } = action.payload
-
-        // })
-        // .addCase(updateUserCart.rejected, (state, action) => {
-        //     toast.error(action.payload)
-        // })
-
-        // // removeFromUserCart
-        // .addCase(removeFromUserCart.fulfilled, (state, action) => {
-        //     const { success } = action.payload
-
-        // })
-        // .addCase(removeFromUserCart.rejected, (state, action) => {
-        //     toast.error(action.payload)
-        // })
+            // // removeCartItem
+            .addCase(removeCartItem.fulfilled, (state, action) => {
+                const { success, message, url_slug } = action.payload
+                if (success) {
+                    state.userCart = state.userCart.filter(cartItem => cartItem.url_slug != url_slug)
+                    toast.success(message)
+                }
+                cartSlice.caseReducers.findCartTotal(state);
+            })
+            .addCase(removeCartItem.rejected, (state, action) => {
+                toast.error(action.payload)
+            })
     }
 })
 
-export const { frontendAddToCart } = cartSlice.actions
+export const { frontendAddToCart, emptyCurrentUserCartFromFrontend, findCartTotal } = cartSlice.actions
 export default cartSlice.reducer

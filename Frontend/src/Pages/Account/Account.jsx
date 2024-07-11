@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Header from '../Components/Header';
+import Header from '../../Components/Header';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
@@ -9,25 +9,32 @@ import { FaGlobeAmericas } from "react-icons/fa";
 import { FaTreeCity } from "react-icons/fa6";
 import { MdLocationPin } from "react-icons/md";
 import { FaLandmarkFlag } from "react-icons/fa6";
+import { MdDelete } from "react-icons/md";
 
-import { fetchAddress, requestToAddAddress, requestToEditAddress } from '../redux/user/userSlice';
-import { fetchOrder, deleteOrder } from '../redux/order/orderSlice';
+import { fetchAddress, requestToAddAddress, requestToEditAddress, removeCurrentUserAddressFromFrontend } from '../../redux/user/userSlice';
+import { fetchOrder, deleteOrder, requestPayment, emptyCurrentUserOrderTableFromFrontend, emptyCurrentUserOrderItemFromFrontend } from '../../redux/order/orderSlice';
+import { emptyCurrentUserCartFromFrontend } from '../../redux/cart/cartSlice';
 
 const Accessories = () => {
   const [pageContent, setPageContent] = useState("order")
   const [pageData, setPageData] = useState({})
   const [isModalOpen, setIsModalOpen] = useState("");
+  const [paymentLoadingState, setPaymentLoadingState] = useState(null);
 
   const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm()
   const navigate = useNavigate()
   const dispatch = useDispatch();
   const { loading, address } = useSelector((state) => state.user);
-  const { orderLoading, orderTable } = useSelector((state) => state.order);
+  const { orderLoading, orderTable, paymentLoading } = useSelector((state) => state.order);
 
   const countries = ["Afghanistan", "Albania", "Algeria", "Andorra", "Angola", "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Belize", "Benin", "Bhutan", "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia", "Cameroon", "Canada", "Central African Republic", "Chad", "Chile", "China", "Colombia", "Comoros", "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus", "Czech Republic", "Denmark", "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini", "Ethiopia", "Fiji", "Finland", "France", "Gabon", "Gambia", "Georgia", "Germany", "Ghana", "Greece", "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana", "Haiti", "Honduras", "Hungary", "Iceland", "India", "Indonesia", "Iran", "Iraq", "Ireland", "Israel", "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands", "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique", "Myanmar", "Namibia", "Nauru", "Nepal", "Netherlands", "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea", "North Macedonia", "Norway", "Oman", "Pakistan", "Palau", "Palestine", "Panama", "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland", "Portugal", "Qatar", "Romania", "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia", "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan", "Tajikistan", "Tanzania", "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago", "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda", "Ukraine", "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan", "Vanuatu", "Vatican City", "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe"];
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
     localStorage.removeItem("token")
+    await dispatch(removeCurrentUserAddressFromFrontend())
+    await dispatch(emptyCurrentUserOrderTableFromFrontend())
+    await dispatch(emptyCurrentUserOrderItemFromFrontend())
+    await dispatch(emptyCurrentUserCartFromFrontend())
     navigate('/account/login')
   }
 
@@ -83,7 +90,7 @@ const Accessories = () => {
   }
 
   const handleOrderContent = () => {
-    setPageData({})  
+    setPageData({})
     setPageContent("order")
     if (orderTable.length < 1) {
       fetchOrderFromBackend()
@@ -107,13 +114,15 @@ const Accessories = () => {
     return date.toISOString().split('T')[0];
   };
 
-  const handleDeleteOrder = async(order_id) => {
+  const handleDeleteOrder = async (order_id) => {
     await dispatch(deleteOrder({ order_id }))
   }
 
-  const handlePaymentOrder = async(orderRow) => {
-    console.log(orderRow, "got complete row of that order")
-  }
+  const handlePaymentOrder = async (order_id) => {
+    setPaymentLoadingState(order_id)
+    const response = await dispatch(requestPayment({ order_id }));
+    window.location.href = response.payload.data.links[1].href;
+  }  
 
   return (
     <>
@@ -133,7 +142,7 @@ const Accessories = () => {
           </div>
         </div>
 
-        <div className='w-4/5 px-20 py-10' >
+        <div className='w-4/5 px-16 py-10' >
           {/* -------------------------------------------------------------------------------------------------------------------------------------------------------- */}
           {/* Order */}
           {pageContent === "order" && <div>
@@ -164,16 +173,21 @@ const Accessories = () => {
                   {orderTable.map((item, index) => (
                     <tr key={index} >
                       <td>{formatDate(item.updated_at)}</td>
-                      <td>${item.total_amount}</td>
-                      <td>${item.shipping_charges}</td>
-                      <td>${item.net_amount}</td>
+                      <td>€ {item.total_amount}</td>
+                      <td>€ {item.shipping_charges}</td>
+                      <td>€ {item.net_amount}</td>
                       <td>{item.status}</td>
                       <td>{item.order_no}</td>
                       <td>
-                        {!item.status == "paid" ? <>{item.payment_id}</> :
-                          <div>
-                            <button onClick={() => handlePaymentOrder(item)} className='mr-5 text-green-500 font-bold hover:underline underline-offset-2	'>Pay Now</button>
-                            <button onClick={() => handleDeleteOrder(item.id)} className='text-red-500 font-bold hover:underline underline-offset-2' >Delete</button>
+                        {item.status === "paid" ? <>{item.payment_id}</> :
+                          <div className='flex justify-center items-center gap-5 '>
+                            <button onClick={() => handlePaymentOrder(item.id)} className='bg-yellow-400 w-24 px-2 rounded-md' >
+                              {paymentLoading && paymentLoadingState == item.id ?
+                                <div className='flex justify-center items-center text-lg font-medium animate-pulse text-white duration-500' >O</div>
+                                : 
+                                <img className='py-1' src="/Common/paypal_logo.png" alt="paypal button" loading='lazy' />}
+                            </button>
+                            <button onClick={() => handleDeleteOrder(item.id)} className='text-2xl text-red-500 ' ><MdDelete /></button>
                           </div>
                         }
                       </td>
@@ -302,7 +316,7 @@ const Accessories = () => {
               {!loading && pageData && !pageData.success &&
                 <div>
                   <p>Add address to get delivery</p>
-                  <button onClick={() => handleOpenAddressModal(false)} className='w-full bg-black text-white border border-[#a8abac] py-3 my-10 rounded-full hover:bg-white hover:text-black' >Add Address</button>
+                  <button onClick={() => handleOpenAddressModal(false)} className='w-1/3 bg-black text-white border border-[#a8abac] py-3 my-10 rounded-full hover:bg-white hover:text-black' >Add Address</button>
                 </div>}
               {isModalOpen === "addAddress" &&
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 ">

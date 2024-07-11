@@ -1,5 +1,15 @@
 const prisma = require('../config/db.js')
 const { v4: uuidv4 } = require('uuid');
+const paypal = require('paypal-rest-sdk');
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+paypal.configure({
+    'mode': 'sandbox',
+    'client_id': process.env.CLIENT_ID,
+    'client_secret': process.env.CLIENT_SECRET
+});
 
 
 // ADD TO ORDERS (Move all data from cart to order)
@@ -25,12 +35,12 @@ exports.checkout = async function (req, res) {
             return res.status(400).json({ success: false, message: 'Add address to checkout' });
         }
 
+
         let order = await prisma.order.create({
-            // data: { order_no, user_id, total_amount: 0, shipping_charges: 0, net_amount: 0, address_id: searchAddress.id }
-            data: { order_no, user_id, total_amount: 0, shipping_charges: 0, net_amount: 0, address_id: "" }
+            data: { order_no, user_id, total_amount: 0, shipping_charges: 0, net_amount: 0, address_id: searchAddress.id }
         })
 
-        // Adding to order item table
+        // Adding in order item table
         let total_amount = 0;
         for (const item of cartItems) {
             let table;
@@ -47,7 +57,7 @@ exports.checkout = async function (req, res) {
                 return res.status(404).json({ success: false, message: `Item doesn't exists` });
             }
             if (searchItem.quantity < 1) {
-                return res.status(404).json({ success: false, message: 'Few item out of stock' });  // which item out o stock show them
+                return res.status(404).json({ success: false, message: 'Few item out of stock' });  // which item out fo stock show them
             }
 
             total_amount += parseInt(item.price) * parseInt(item.quantity)
@@ -56,10 +66,8 @@ exports.checkout = async function (req, res) {
                 data: { order_id: parseInt(order.id), item_type: item.item_type, url_slug: item.url_slug, quantity: parseInt(item.quantity), price: parseInt(item.price) }
             })
         };
-
         // add to order table
         const shipping_charges = Math.floor(Math.random() * 91) + 10;
-        // console.log(shipping_charges)
         const net_amount = total_amount + shipping_charges
 
         await prisma.order.update({
@@ -72,12 +80,14 @@ exports.checkout = async function (req, res) {
             where: { user_id }
         });
 
-        orderItem = prisma.orderItem
-        res.status(200).json({ success: true, order, orderItem, message: 'Checkout successful' });
-        // res.status(200).json({ success: true, order, message: 'Checkout successful' });
+        // For returning items of order item table
+        const orderItem = await prisma.orderItem.findMany({
+            where: { order_id: order.id }
+        })
+        return res.status(200).json({ success: true, order, orderItem, message: 'Items moved Order section from Cart' });
 
     } catch (error) {
-        console.error(error);
+        console.error(error, "------------------------", error.message);
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 }
@@ -92,7 +102,7 @@ exports.get = async function (req, res) {
         // Find order
         const order = await prisma.order.findMany({
             where: { user_id: user_id, OR: [{ updated_at: { gte: sevenDaysAgo } }, { status: 'unpaid' }] },
-            orderBy: { updated_at: 'desc'}
+            orderBy: { updated_at: 'desc' }
         });
         if (order.length < 1) {
             return res.status(404).json({ success: false, message: 'No order exists' });
@@ -193,84 +203,15 @@ exports.update = async function (req, res) {
     }
 };
 
-// UPDATE ORDERS (AFTER PAYMENT), reduce quantity from stock
-exports.paid = async function (req, res) {
-    try {
-        const { payment_id, order_id } = req.body
-
-        // Check if the order exists
-        const order = await prisma.order.findFirst({
-            where: { id: order_id }
-        });
-
-        if (!order) {
-            return res.status(404).json({ success: false, message: 'No such order exists' });
-        }
-
-        // Get the order items for the order
-        const orderItems = await prisma.orderItem.findMany({
-            where: { order_id }
-        })
-        if (orderItems.length < 1) {
-            return res.status(404).json({ success: false, message: 'No such order exists' });
-        }
-
-        // Check finally stock in inventory before payment
-        for (const item of orderItems) {
-            let table;
-            if (item.item_type === "Product") {
-                table = "productDetail"
-            }
-            else {
-                table = "accessory"
-            }
-
-            const inventoryItem = await prisma[table].findFirst({
-                where: { url_slug: item.url_slug },
-            })
-            if (inventoryItem.quantity < item.quantity) {
-                return res.status(404).json({ success: false, message: 'Stock out, try when stock is available' });
-            }
-        }
-
-        // Update the inventory for each order item
-        for (const item of orderItems) {
-            let table;
-            if (item.item_type === "Product") {
-                table = "productDetail"
-            }
-            else {
-                table = "accessory"
-            }
-
-            await prisma[table].update({
-                where: { url_slug: item.url_slug },
-                data: { quantity: { decrement: item.quantity } }
-            })
-        }
-
-        // Update the order to mark it as paid
-        const updatedOrder = await prisma.order.update({
-            where: { id: parseInt(order_id) },
-            data: { payment_id, status: "paid" }
-        });
-
-        res.status(200).json({ success: true, order, message: 'Order filled successfully' });
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Internal Server Error' });
-    }
-}
-
 // DELETE ORDER
 exports.remove = async function (req, res) {
     try {
-        const { order_id } = req.body;
+        const user_id = req.user.id;
+        const order_id = parseInt(req.params.order_id);
 
         // Check for order
         const order = await prisma.order.findFirst({
-            where: { id: order_id }
+            where: { user_id, id: order_id }
         });
         if (!order) {
             return res.status(404).json({ success: false, message: 'No such order exists' });
@@ -288,7 +229,251 @@ exports.remove = async function (req, res) {
         await prisma.order.delete({
             where: { id: order_id }
         });
-        res.status(200).json({ success: true, message: 'Order deleted successfully' });
+        res.status(200).json({ success: true, order_id, message: 'Order deleted successfully' });
+
+    } catch (error) {
+        console.error(error, "------------------------------------", error.message);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
+// Paypal Payment
+exports.payment = async function (req, res) {
+    let data
+    try {
+        const user_id = req.user.id;
+        const { order_id } = req.body;
+
+        // Check for order
+        const order = await prisma.order.findFirst({
+            where: { user_id, id: order_id }
+        });
+        if (!order) {
+            return res.status(404).json({ success: false, message: 'No such order exists' });
+        }
+        if (order.status === "paid") {
+            return res.status(404).json({ success: false, message: `Already paid` });
+        }
+
+        let create_payment_json = {
+            "intent": "sale",
+            "payer": {
+                "payment_method": "paypal"
+            },
+            "redirect_urls": {
+                "return_url": "http://localhost:3000/api/order/success",
+                "cancel_url": "http://localhost:3000/api/order/failed"
+            },
+            "transactions": [{
+                "item_list": {
+                    "items": [{
+                        "name": `Item Purchase ${order.order_no}`,
+                        "sku": "item",
+                        "price": order.net_amount,
+                        "currency": "EUR",
+                        "quantity": 1
+                    }]
+                },
+                "amount": {
+                    "currency": "EUR",
+                    "total": order.net_amount
+                },
+                "description": "Payment for purchase order from VeloCity"
+            }]
+        };
+
+        await paypal.payment.create(create_payment_json, function (error, payment) {
+            if (error) {
+                console.log(error, error.message)
+            } else {
+                data = payment;
+
+                // save payer id
+                const addPaymentId = async () => {
+                    await prisma.order.update({
+                        where: { user_id, id: order_id },
+                        data: { payment_id: data.id, status: "processing" }
+                    });
+                }
+                addPaymentId()
+                res.status(200).json({ success: true, data });
+            }
+        });
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
+// PAYPAL PAYMENT SUCCESS, reduce quantity from stock
+exports.success = async function (req, res) {
+    try {
+
+        const payerId = req.query.PayerID;
+        const paymentId = req.query.paymentId;
+
+        // check payer id
+        const order = await prisma.order.findFirst({
+            where: { payment_id: paymentId }
+        })
+        if (!order.payment_id) {
+            return res.redirect("http://localhost:5173/account/payment/failed");
+        }
+
+        // update payment status & reduce quantity
+        const updatedPaymentId = async () => {
+            // Get the order items for the order
+            const orderItems = await prisma.orderItem.findMany({
+                where: { order_id: order.id }
+            })
+            
+            // Check finally stock in inventory before payment
+            for (const item of orderItems) {
+                let table;
+                if (item.item_type === "Product") {
+                    table = "productDetail"
+                }
+                else {
+                    table = "accessory"
+                }
+                
+                const inventoryItem = await prisma[table].findFirst({
+                    where: { url_slug: item.url_slug },
+                })
+                if (inventoryItem.quantity < item.quantity) {
+                    return res.redirect("http://localhost:5173/account/payment/failed");
+                }
+            }
+
+            // Update the inventory for each order item
+            for (const item of orderItems) {
+                let table;
+                if (item.item_type === "Product") {
+                    table = "productDetail"
+                }
+                else {
+                    table = "accessory"
+                }
+
+                await prisma[table].update({
+                    where: { url_slug: item.url_slug },
+                    data: { quantity: { decrement: item.quantity } }
+                })
+            }
+
+            // update order status
+            await prisma.order.update({
+                where: { id: order.id },
+                data: { payment_id: paymentId.replace("PAYID-", ""), status: "paid" }
+            });
+        }
+
+        const execute_payment_json = {
+            "payer_id": payerId,
+            "transactions": [{
+                "amount": {
+                    "currency": "EUR",
+                    "total": order.net_amount
+                }
+            }]
+        }
+
+        await paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
+            if (error) {
+                console.log(error)
+                return res.redirect("http://localhost:5173/account/payment/failed");
+            } else {
+                console.log("Execute Payment Response");
+                const response = JSON.stringify(payment);
+                const parsedResponse = JSON.parse(response);
+                const transactions = parsedResponse.transactions[0];
+                console.log("transactions", transactions);
+                updatedPaymentId()
+                return res.redirect("http://localhost:5173/account/payment/success");
+            }
+        })
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
+// UPDATE ORDERS (AFTER PAYMENT), reduce quantity from stock
+// exports.paid = async function (req, res) {
+//     try {
+//         const { payment_id, order_id } = req.body
+
+//         // Check if the order exists
+//         const order = await prisma.order.findFirst({
+//             where: { id: order_id }
+//         });
+
+//         if (!order) {
+//             return res.status(404).json({ success: false, message: 'No such order exists' });
+//         }
+
+//         // Get the order items for the order
+//         const orderItems = await prisma.orderItem.findMany({
+//             where: { order_id }
+//         })
+//         if (orderItems.length < 1) {
+//             return res.status(404).json({ success: false, message: 'No such order exists' });
+//         }
+
+//         // Check finally stock in inventory before payment
+//         for (const item of orderItems) {
+//             let table;
+//             if (item.item_type === "Product") {
+//                 table = "productDetail"
+//             }
+//             else {
+//                 table = "accessory"
+//             }
+
+//             const inventoryItem = await prisma[table].findFirst({
+//                 where: { url_slug: item.url_slug },
+//             })
+//             if (inventoryItem.quantity < item.quantity) {
+//                 return res.status(404).json({ success: false, message: 'Stock out, try when stock is available' });
+//             }
+//         }
+
+//         // Update the inventory for each order item
+//         for (const item of orderItems) {
+//             let table;
+//             if (item.item_type === "Product") {
+//                 table = "productDetail"
+//             }
+//             else {
+//                 table = "accessory"
+//             }
+
+//             await prisma[table].update({
+//                 where: { url_slug: item.url_slug },
+//                 data: { quantity: { decrement: item.quantity } }
+//             })
+//         }
+
+//         // Update the order to mark it as paid
+//         const updatedOrder = await prisma.order.update({
+//             where: { id: parseInt(order_id) },
+//             data: { payment_id, status: "paid" }
+//         });
+
+//         res.status(200).json({ success: true, order, message: 'Order filled successfully' });
+
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).json({ success: false, message: 'Internal Server Error' });
+//     }
+// }
+
+// PAYPAL PAYMENT FAILED (if user cancels payment)
+exports.failed = async function (req, res) {
+    try {
+        return res.redirect("http://localhost:5173/account/payment/failed");
 
     } catch (error) {
         console.error(error);

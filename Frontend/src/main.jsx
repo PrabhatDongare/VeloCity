@@ -7,7 +7,9 @@ import Login from './Pages/Auth/Login.jsx'
 import Signup from './Pages/Auth/Signup.jsx'
 import ForgotPassword from './Pages/Auth/ForgotPassword.jsx'
 import ResetPassword from './Pages/Auth/ResetPassword.jsx'
-import Account from './Pages/Account.jsx'
+import Account from './Pages/Account/Account.jsx'
+import PaymentFailed from './Pages/Account/PaymentFailed.jsx'
+import PaymentSuccess from './Pages/Account/PaymentSuccess.jsx'
 import ElectricBike from './Pages/ElectricBike.jsx'
 import CityBike from './Pages/CityBike.jsx'
 import Store from './Pages/Store.jsx'
@@ -99,7 +101,15 @@ const router = createBrowserRouter([
   {
     path: "*",
     element: <ErrorPage />,
-  }
+  },
+  {
+    path: "account/payment/success",
+    element: <PaymentSuccess />,
+  },
+  {
+    path: "account/payment/failed",
+    element: <PaymentFailed />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

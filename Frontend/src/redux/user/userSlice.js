@@ -99,6 +99,13 @@ export const userSlice = createSlice({
         address: [],
         loading: false,
     },
+
+    reducers: {
+        removeCurrentUserAddressFromFrontend: (state) => {
+            state.address = []
+        }
+    },
+
     extraReducers: (builder) => {
         builder
             // fetchUserLogin
@@ -199,4 +206,5 @@ export const userSlice = createSlice({
 })
 
 
+export const { removeCurrentUserAddressFromFrontend } = userSlice.actions
 export default userSlice.reducer

@@ -15,21 +15,6 @@ export const fetchProductData = createAsyncThunk("fetchProductData", async ({ pr
     }
 });
 
-export const requestAddToCart = createAsyncThunk("requestAddToCart", async ({ item_type, url_slug, quantity }, { rejectWithValue }) => {
-    try {
-        const headers = {
-            'Content-Type': 'application/json',
-            'authToken': localStorage.getItem('token'),
-        };
-        const response = await axios.post(`${baseUrl}api/cart/add/${item_type}/${url_slug}/${quantity}`, {}, { headers });
-        return response.data;
-
-    } catch (error) {
-        console.log(error)
-        return rejectWithValue(error.response.data.message);
-    }
-});
-
 export const fetchAccessoryData = createAsyncThunk("fetchAccessoryData", async (_, { rejectWithValue }) => {
     try {
         const response = await axios.post(`${baseUrl}api/item/getAccessory`);
@@ -71,7 +56,7 @@ export const itemSlice = createSlice({
             console.log("checking random : ", numbers, "exclude : ", exclude, "acc main card : ", accessoryItemPageMainCard)
             state.accessoryItemPage.push(accessoryItemPageMainCard)
             state.accessory.filter(accessoryCol => state.accessoryItemPage.push(numbers.includes(accessoryCol.id)));
-            console.log(state.accessoryItemPage, "Checking code now")
+            // console.log(state.accessoryItemPage, "Checking code now")
         },
     },
     extraReducers: (builder) => {
@@ -95,16 +80,6 @@ export const itemSlice = createSlice({
             })
 
             .addCase(fetchProductData.rejected, (state, action) => {
-                toast.error(action.payload)
-            })
-
-            // requestAddToCart
-            .addCase(requestAddToCart.fulfilled, (state, action) => {
-                const { success, newCartItem, message } = action.payload
-                return { ...state, success, newCartItem, message }
-            })
-
-            .addCase(requestAddToCart.rejected, (state, action) => {
                 toast.error(action.payload)
             })
 

@@ -2,15 +2,12 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { unwrapResult } from '@reduxjs/toolkit';
-import { toast } from 'react-toastify';
 
 import Header from '../Components/Header';
 import { fetchAccessoryData } from '../redux/item/itemSlice';
 import AccessoriesCard from '../Components/AccessoriesCard';
 
-import { requestAddToCart } from '../redux/item/itemSlice'
-import { frontendAddToCart } from '../redux/cart/cartSlice'
+import { requestAddToCart } from '../redux/cart/cartSlice'
 
 const AccessoriesItem = () => {
   const { url_slug } = useParams();
@@ -36,8 +33,8 @@ const AccessoriesItem = () => {
     const item = await accessory.find(acc => acc.url_slug === url_slug);
     if (item) {
       setAccessoryItem(item);
-      console.log(accessoryItem, "Printing accessory Item ")
-      console.log(accessory, "Printing accessory array ")
+      // console.log(accessoryItem, "Printing accessory Item ")
+      // console.log(accessory, "Printing accessory array ")
     }
   };
 
@@ -87,14 +84,7 @@ const AccessoriesItem = () => {
 
   const handleAddToCart = async () => {
     if (localStorage.getItem("token")) {
-      const resultAction = await dispatch(requestAddToCart({ item_type: "Accessory", url_slug, quantity: userChangesQuantity }))
-      const result = unwrapResult(resultAction);
-      const { success, newCartItem, message } = result
-
-      if (success) {
-        await frontendAddToCart({ newCartItem })
-      }
-      toast.success(message)
+      await dispatch(requestAddToCart({ item_type: "Accessory", url_slug, quantity: userChangesQuantity }))
     }
     else {
       navigate("/account/login");
@@ -112,13 +102,11 @@ const AccessoriesItem = () => {
       <section className='flex '>
         <div className='bg-[#f0f0f0] h-[94vh] w-4/6 '>
           <img src={`/images/Accessories/Set ${accessoryItem.section}/${accessoryItem.accessory_name}.webp`} alt="accessory" loading='lazy' className='h-[94vh] w-[100%] object-cover' />
-          {console.log(accessoryItem, "THis is inside")}
         </div>
 
         <div className='w-2/6 p-10 font-montserrat-regular'>
           <p className='flex justify-between text-3xl gap-0' >
             <span className='font-montserrat-medium' >{accessoryItem.accessory_name}</span>
-            {/* <span className='font-montserrat-medium bg-slate-400 ' >1</span> */}
             <span className='text-[#727373] font-montserrat-regular flex gap-1' ><span>&euro; </span>{accessoryItem.price}</span>
           </p>
           <p className='text-[#727373] pt-10' >{accessoryItem.description}</p>
@@ -147,7 +135,6 @@ const AccessoriesItem = () => {
           ))}
         </div>
       </section>
-      {/* <img src="/images/Accessories/Set 1/Cargo Basket.webp" alt="" /> */}
     </>
   );
 };

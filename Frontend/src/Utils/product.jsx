@@ -41,7 +41,23 @@ export const Ivy_Two = {
     '/Product/Product 8/Ivy_Two_-_Pebble_Grey_-_NEW.webp',
     '/Product/Product 8/Ivy_Two_-_Pebble_Grey_-_2_-_NEW.webp',
     '/Product/Product 8/Ivy_Two_-_Pebble_Grey_-_3_-_NEW.webp',
-  ]  
+  ]
 }
 
-
+export const accessoryImagesArray = [
+  "/images/Accessories/Set 1/Brooks Slendergrips Aged.webp",
+  "/images/Accessories/Set 1/Porteur Carrier Black.webp",
+  "/images/Accessories/Set 1/Front Carrier.webp",
+  "/images/Accessories/Set 1/Wire Basket.webp",
+  "/images/Accessories/Set 1/Brooks Slendergrips Black.webp",
+  "/images/Accessories/Set 1/Cargo Basket.webp",
+  "/images/Accessories/Set 1/Epic Basket.webp",
+  "/images/Accessories/Set 1/Electric Rear Carrier Silver.webp",
+  "/images/Accessories/Set 2/VeloCity Bell Black.webp",
+  "/images/Accessories/Set 2/VeloCity Bell Silver.webp",
+  "/images/Accessories/Set 2/AXA Framelock Solid.webp",
+  "/images/Accessories/Set 2/AXA LED Light Set.webp",
+  "/images/Accessories/Set 2/AXA Framelock with 140 cm Chain.webp",
+  "/images/Accessories/Set 2/Brooks B67 Black.webp",
+  "/images/Accessories/Set 2/VeloCity Bell Copper.webp"
+]

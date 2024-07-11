@@ -242,6 +242,13 @@ exports.addAddress = async function (req, res) {
         const address = await prisma.address.create({
             data: { user_id: parseInt(user_id), house_no, street_name, zipcode, city, country, phone: parseInt(phone) }
         });
+
+        // Update status
+        await prisma.user.update({
+            where: { id: user_id },
+            data: { status: "active" }
+        })
+
         res.status(200).json({ success: true, address });
     } catch (error) {
         console.error(error);

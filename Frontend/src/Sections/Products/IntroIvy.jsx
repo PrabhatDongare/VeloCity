@@ -12,8 +12,8 @@ import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { SlArrowDown, SlArrowUp } from "react-icons/sl";
 
 import { Ace_Two, Ivy_Two } from "../../Utils/product";
-import { fetchProductData, requestAddToCart } from '../../redux/item/itemSlice'
-import { frontendAddToCart } from '../../redux/cart/cartSlice'
+import { fetchProductData } from '../../redux/item/itemSlice'
+import { frontendAddToCart, requestAddToCart } from '../../redux/cart/cartSlice'
 
 const responsive = {
     superLargeDesktop: {
@@ -72,11 +72,12 @@ const Intro = ({ scrollId }) => {
             
             const resultAction = await dispatch(requestAddToCart({ item_type:"Product", url_slug, quantity:1 }))
             const result = unwrapResult(resultAction);
-            const { success, newCartItem, message } = result
+            const { message } = result
+            // const { success, newCartItem, message } = result
 
-            if(success){
-                await frontendAddToCart({ newCartItem })
-            }
+            // if(success){
+            //     await frontendAddToCart({ newCartItem })
+            // }
             toast.success(message)
         }
         else{

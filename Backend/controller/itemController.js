@@ -161,33 +161,3 @@ exports.updateAccessory = async (req, res) => {
         res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 };
-
-// --------------------------------------------------------
-// LINK PRODUCT to ACCESSORY
-// exports.linkProductAccessory = async (req, res) => {
-//     try {
-//         const { productId, accessoryId } = req.body;
-//         const productAccessory = await prisma.productAccessory.create({
-//             data: { productId, accessoryId }
-//         });
-//         res.status(200).json({ success: true, productAccessory });
-
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ success: false, message: 'Internal Server Error' });
-//     }
-// };
-
-// UNLINK PRODUCT to ACCESSORY
-// exports.unlinkProductAccessory = async (req, res) => {
-//     try {
-//         const { productId, accessoryId } = req.body;
-//         await prisma.productAccessory.deleteMany({
-//             where: { productId: parseInt(productId), accessoryId: parseInt(accessoryId) }
-//         });
-//         res.status(200).json({ success: true, message: 'Product-Accessory link removed' });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ success: false, message: 'Internal Server Error' });
-//     }
-// };
